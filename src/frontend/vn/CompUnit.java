@@ -1,8 +1,10 @@
 package frontend.vn;
 
 import error.Error;
+import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.Value;
 
 public class CompUnit extends Vn{
 
@@ -46,6 +48,9 @@ public class CompUnit extends Vn{
         this.addVn(mainFuncDef);
         return ret;
     }
+    public int RLLVM(SymbolTable symbolTable, Value value){
 
+        return 0;
+    }
 
 }

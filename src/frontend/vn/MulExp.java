@@ -4,6 +4,7 @@ import frontend.symbol.Symbol;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.*;
 import utils.Writer;
 
 public class MulExp extends Vn{
@@ -59,5 +60,49 @@ public class MulExp extends Vn{
             }
         }
         return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        int lastreg = -1;
+        int ansreg = 0;
+        Vn op = null;
+        if(!(value instanceof BasicBlock)){
+            return 0;
+        }
+        value = (BasicBlock) value;
+        for(Vn vn:vns){
+            if(!vn.isVt){
+                ansreg = vn.RLLVM(symbolTable,value);
+                if(lastreg != -1){
+                    int newreg = symbolTable.newReg();
+                    addInstruction(value,symbolTable,newreg,op,lastreg,ansreg);
+                    lastreg = newreg;
+                } else {
+                    lastreg = ansreg;
+                }
+            } else {
+                op = vn;
+            }
+        }
+        return lastreg;
+    }
+
+    protected void addInstruction(Value value, SymbolTable symbolTable, int result,
+                                  Vn op, int reg1, int reg2){
+        if(!(value instanceof BasicBlock)){
+            return;
+        }
+        value = (BasicBlock) value;
+        Operator op1 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg1));
+        Operator op2 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg1));
+
+        if(op.getToken().getValue().equals("*")){
+            ((BasicBlock) value).addInstruction(new InsMul(Symbol.reg2str(result), VarType.INT, op1, op2));
+        } else if(op.getToken().getValue().equals("/")) {
+            ((BasicBlock) value).addInstruction(new InsSdiv(Symbol.reg2str(result), VarType.INT, op1, op2));
+        } else {
+            ((BasicBlock) value).addInstruction(new InsSrem(Symbol.reg2str(result), VarType.INT, op1, op2));
+        }
     }
 }

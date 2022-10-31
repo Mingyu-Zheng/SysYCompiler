@@ -12,17 +12,40 @@ public class Symbol{
     private int funcFParamNum = 0;
     private ArrayList<Symbol> funcParas = new ArrayList<>();
 
+    private int regindex = 0;
+    private int index = 0;
+
     public Symbol(String symbol, SymbolKind kind){
         this.name = symbol;
         this.kind = kind;
         this.type = type;
     }
+
     public Symbol(String symbol, SymbolKind kind, SymbolType type){
         this.name = symbol;
         this.kind = kind;
         this.type = type;
     }
 
+    public Symbol(int regindex){
+        this.regindex = regindex;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getRegindex() {
+        return regindex;
+    }
+
+    public static String reg2str(int regindex){
+        return "%" + String.valueOf(regindex);
+    }
 
     public Symbol getFuncPara(int index) {
         if(index >= 0 && index < this.funcParas.size()){

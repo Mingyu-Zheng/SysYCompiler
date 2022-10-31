@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import frontend.symbol.Symbol;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
+import midend.llvm.Mudule;
+import midend.llvm.Value;
 import utils.Writer;
 
 public class Vn{
@@ -125,6 +127,15 @@ public class Vn{
             }
         }
         return ret;
+    }
+
+    public int RLLVM(SymbolTable symbolTable, Value value){
+        for(Vn vn:vns){
+            if(!vn.isVt){
+                RLLVM(symbolTable, value);
+            }
+        }
+        return 0;
     }
 
     public int writeVnVt(Writer writer){

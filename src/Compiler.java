@@ -2,6 +2,7 @@ import error.Error;
 import frontend.vn.CompUnit;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
+import midend.llvm.Mudule;
 import utils.Reader;
 import utils.Writer;
 
@@ -11,19 +12,24 @@ public class Compiler {
     Writer writer;
 
     static CompUnit unit;
-    static SymbolTable symbolTable;
+    static SymbolTable symbolTableForError;
+    static SymbolTable symbolTableForLLVM;
+    static Mudule unitLLVM;
 
     public static void main(String args[]){
-        Compiler compiler = new Compiler("testfile.txt","error.txt");
+        Compiler compiler = new Compiler("testfile.txt","llvm_ir.txt");
         Token token = null;
         while((token = Token.getToken(compiler.reader)) != null){
             Token.addToken(token);
         }
         unit = new CompUnit();
         unit.RCompUnit();
-        symbolTable = new SymbolTable(1);
-        unit.RAnalysis(symbolTable);
-        compiler.writeErrors();
+        symbolTableForError = new SymbolTable(1);
+        unit.RAnalysis(symbolTableForError);
+        symbolTableForLLVM = new SymbolTable(1);
+        unitLLVM = new Mudule();
+        unit.RLLVM(symbolTableForLLVM, unitLLVM);
+        compiler.writeLLVM();
     }
 
     Compiler(String fin,String fout){
@@ -46,6 +52,11 @@ public class Compiler {
 
     void writeErrors(){
         Error.writeErrors(writer);
+        writer.writeContent();
+    }
+
+    void writeLLVM(){
+        unitLLVM.writeValue(writer);
         writer.writeContent();
     }
 }

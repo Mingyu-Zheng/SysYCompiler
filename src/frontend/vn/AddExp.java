@@ -4,7 +4,10 @@ import frontend.symbol.Symbol;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.*;
 import utils.Writer;
+
+import java.util.Base64;
 
 public class AddExp extends Vn{
 
@@ -59,5 +62,48 @@ public class AddExp extends Vn{
             }
         }
         return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        int lastindex = -1;
+        int ansindex = 0;
+        Vn op = null;
+        if(!(value instanceof BasicBlock)){
+            return 0;
+        }
+        value = (BasicBlock) value;
+        for(Vn vn:vns){
+            if(!vn.isVt){
+                ansindex = vn.RLLVM(symbolTable,value);
+                if(lastindex != -1){
+                    int newindex = symbolTable.newReg();
+                    addInstruction(value,symbolTable,newindex,op,lastindex,ansindex);
+                    symbolTable.addreg();
+                    lastindex = newindex;
+                } else {
+                    lastindex = ansindex;
+                }
+            } else {
+                op = vn;
+            }
+        }
+        return lastindex;
+    }
+
+    protected void addInstruction(Value value, SymbolTable symbolTable, int result,
+                                  Vn op, int reg1, int reg2){
+        if(!(value instanceof BasicBlock)){
+            return;
+        }
+        value = (BasicBlock) value;
+        Operator op1 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg1));
+        Operator op2 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg2));
+
+        if(op.getToken().getValue().equals("+")){
+            ((BasicBlock) value).addInstruction(new InsAdd(Symbol.reg2str(result), VarType.INT, op1, op2));
+        } else {
+            ((BasicBlock) value).addInstruction(new InsSub(Symbol.reg2str(result), VarType.INT, op1, op2));
+        }
     }
 }

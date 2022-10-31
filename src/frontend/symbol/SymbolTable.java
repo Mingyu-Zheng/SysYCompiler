@@ -8,6 +8,9 @@ public class SymbolTable {
     private ArrayList<Symbol> symbols = new ArrayList<>();
     private ArrayList<SymbolTable> sonTables = new ArrayList<>();
 
+    private int regnum = 0;
+    private int symbolnum = 0;
+
     public SymbolTable(int depth){
         this.depth = depth;
     }
@@ -21,8 +24,45 @@ public class SymbolTable {
         return this.depth;
     }
 
+    public int newReg() {
+        regnum++;
+        Symbol symbol = new Symbol(regnum);
+        symbol.setIndex(symbolnum);
+        this.addSymbol(symbol);
+        return symbolnum++;
+    }
+
+    public String getRegByIndex(int index){
+        Symbol out = null;
+        for(Symbol symbol: symbols){
+            if(symbol.getIndex() == index){
+                out = symbol;
+                break;
+            }
+        }
+        if(out == null){
+            return "";
+        }
+        if(out.getRegindex() == -1){
+            return "@" + out.getName();
+        } else {
+            return "%" + out.getRegindex();
+        }
+    }
+
     public void addSymbol(Symbol symbol){
+        symbol.setIndex(symbolnum++);
         this.symbols.add(symbol);
+    }
+
+    public void addreg(){
+        this.regnum++;
+    }
+
+    public void addSymbol2Reg(Symbol symbol){
+        symbol.setIndex(symbolnum++);
+        this.symbols.add(symbol);
+        this.regnum++;
     }
 
     public void addSymbolPara(Symbol symbol){

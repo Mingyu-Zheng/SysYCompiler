@@ -8,6 +8,10 @@ import frontend.symbol.SymbolKind;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.*;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class UnaryExp extends Vn{
 
@@ -156,5 +160,64 @@ public class UnaryExp extends Vn{
             }
         }
         return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        Vn vn0 = vns.get(0);
+        if(vn0 instanceof PrimaryExp){
+            return vn0.RLLVM(symbolTable,value);
+        } else if(vn0 instanceof UnaryOp) {
+            if(vn0.getToken().getValue().equals("+")){
+                return vn0.RLLVM(symbolTable, value);
+            } else if(vn0.getToken().getValue().equals("-")){
+                int lastindex = vns.get(1).RLLVM(symbolTable, value);
+                int newindex = symbolTable.newReg();
+                addUnaryIns(value,newindex,vn0,lastindex);
+                return newindex;
+            } else {
+
+                return 0;
+            }
+        } else {
+            String name = vn0.getToken().getValue();
+            Symbol symbol = symbolTable.getSymbol(name, SymbolKind.FUNC);
+            int num = symbol.getFuncFParamNum();
+            int[] args = new int[num];
+            //-----------
+
+            int newreg = symbolTable.newReg();
+            addCallIns(value, newreg, symbol.getFuncType(), symbolTable, args);
+            return newreg;
+        }
+    }
+
+    protected void addUnaryIns(Value value, int result, Vn op, int reg){
+        if(!(value instanceof BasicBlock)){
+            return;
+        }
+        value = (BasicBlock) value;
+        Operator op1 = new Operator(VarType.INT , 0);
+        Operator op2 = new Operator(VarType.INT , Symbol.reg2str(reg));
+
+        if(op.getToken().getValue().equals("-")){
+            ((BasicBlock) value).addInstruction(new InsSub(Symbol.reg2str(result), VarType.INT, op1, op2));
+        } else {
+            ((BasicBlock) value).addInstruction(new InsSub(Symbol.reg2str(result), VarType.INT, op1, op2));
+        }
+    }
+
+    protected void addCallIns(Value value, int result, SymbolFuncType type,
+                              SymbolTable symbolTable, int...args){
+
+        if(!(value instanceof BasicBlock)){
+            return;
+        }
+        value = (BasicBlock) value;
+
+
+
+        return;
+
     }
 }
