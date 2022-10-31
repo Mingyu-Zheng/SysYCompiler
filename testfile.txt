@@ -1,0 +1,13 @@
+const int const_num = 1;
+
+int func1(int x){
+    return 0;
+}
+
+int main(){
+    const_num = 1; //对于const进行赋值
+
+    func1(func1);
+
+    // 没有return
+}
