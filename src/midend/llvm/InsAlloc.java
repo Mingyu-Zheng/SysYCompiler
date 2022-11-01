@@ -13,7 +13,7 @@ public class InsAlloc extends Instruction {
 
     @Override
     public int writeValue(Writer writer) {
-        String line = "    " + this.result + " = " + this.insName + this.varType.getTypeName()  + " ";
+        String line = "    " + this.result + " = " + this.insName + " " +  this.varType.getTypeName()  + "\n";
         writer.addStr(line);
         return 0;
     }

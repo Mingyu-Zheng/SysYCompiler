@@ -76,13 +76,14 @@ public class AddExp extends Vn{
         for(Vn vn:vns){
             if(!vn.isVt){
                 ansindex = vn.RLLVM(symbolTable,value);
-                if(lastindex != -1){
-                    int newindex = symbolTable.newReg();
-                    addInstruction(value,symbolTable,newindex,op,lastindex,ansindex);
-                    symbolTable.addreg();
-                    lastindex = newindex;
-                } else {
-                    lastindex = ansindex;
+                if(ansindex != -1){
+                    if(lastindex != -1){
+                        int newindex = symbolTable.newReg();
+                        addInstruction(value,symbolTable,newindex,op,lastindex,ansindex);
+                        lastindex = newindex;
+                    } else {
+                        lastindex = ansindex;
+                    }
                 }
             } else {
                 op = vn;
@@ -101,9 +102,35 @@ public class AddExp extends Vn{
         Operator op2 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg2));
 
         if(op.getToken().getValue().equals("+")){
-            ((BasicBlock) value).addInstruction(new InsAdd(Symbol.reg2str(result), VarType.INT, op1, op2));
+            ((BasicBlock) value).addInstruction(new InsAdd(symbolTable.getRegByIndex(result), VarType.INT, op1, op2));
         } else {
-            ((BasicBlock) value).addInstruction(new InsSub(Symbol.reg2str(result), VarType.INT, op1, op2));
+            ((BasicBlock) value).addInstruction(new InsSub(symbolTable.getRegByIndex(result), VarType.INT, op1, op2));
         }
     }
+
+    public int computeValue(SymbolTable symbolTable){
+        int lastvalue = 0;
+        int ans = 0;
+        Vn op = null;
+
+        for(Vn vn:vns){
+            if(!vn.isVt){
+                ans = vn.computeValue(symbolTable);
+                if(op == null){
+                    lastvalue = ans;
+                } else {
+                    if(op.getToken().getValue().equals("+")){
+                        lastvalue = lastvalue + ans;
+                    } else {
+                        lastvalue = lastvalue - ans;
+                    }
+                }
+            } else {
+                op = vn;
+            }
+        }
+        return lastvalue;
+    }
+
+
 }

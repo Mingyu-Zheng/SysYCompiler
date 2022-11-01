@@ -31,4 +31,8 @@ public class Number extends Vn{
         }
         return ret;
     }
+
+    public int getInt(){
+        return Integer.parseInt(this.vns.get(0).getToken().getValue());
+    }
 }

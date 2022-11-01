@@ -30,4 +30,9 @@ public class Exp extends Vn{
         }
         return ret;
     }
+
+    @Override
+    public int computeValue(SymbolTable symbolTable) {
+        return this.vns.get(0).computeValue(symbolTable);
+    }
 }

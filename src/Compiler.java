@@ -2,7 +2,7 @@ import error.Error;
 import frontend.vn.CompUnit;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
-import midend.llvm.Mudule;
+import midend.llvm.ValueMudule;
 import utils.Reader;
 import utils.Writer;
 
@@ -14,7 +14,7 @@ public class Compiler {
     static CompUnit unit;
     static SymbolTable symbolTableForError;
     static SymbolTable symbolTableForLLVM;
-    static Mudule unitLLVM;
+    static ValueMudule unitLLVM;
 
     public static void main(String args[]){
         Compiler compiler = new Compiler("testfile.txt","llvm_ir.txt");
@@ -27,7 +27,7 @@ public class Compiler {
         symbolTableForError = new SymbolTable(1);
         unit.RAnalysis(symbolTableForError);
         symbolTableForLLVM = new SymbolTable(1);
-        unitLLVM = new Mudule();
+        unitLLVM = new ValueMudule();
         unit.RLLVM(symbolTableForLLVM, unitLLVM);
         compiler.writeLLVM();
     }

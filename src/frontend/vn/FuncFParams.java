@@ -1,7 +1,9 @@
 package frontend.vn;
 
+import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.Value;
 
 public class FuncFParams extends Vn{
 
@@ -25,4 +27,5 @@ public class FuncFParams extends Vn{
         }
         return ret;
     }
+
 }

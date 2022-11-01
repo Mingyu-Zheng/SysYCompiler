@@ -8,6 +8,7 @@ import frontend.symbol.SymbolTable;
 import frontend.symbol.SymbolType;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.*;
 
 public class FuncFParam extends Vn{
 
@@ -90,6 +91,48 @@ public class FuncFParam extends Vn{
         } else {
             symbolTable.addSymbol(symbol);
         }
+        return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        int ret = 0;
+        int dim = 0;
+        String name = this.vns.get(1).getToken().getValue();
+        if(value instanceof Argument){
+            Symbol symbol = new Symbol(name, SymbolKind.PARA);
+            for(Vn vn:this.vns){
+                if(vn.isVt){
+                    if(vn.getToken().isType(TokenType.LBRACK)){
+                        dim++;
+                    }
+                }
+            }
+            if(dim == 0){
+                symbol.setType(SymbolType.INT);
+            } else {
+                symbol.setType(SymbolType.ARRAY);
+                symbol.setArrayDim(dim);
+            }
+
+            symbolTable.addSymbol2Reg(symbol);
+            ret = symbol.getIndex();
+            value = (Argument) value;
+            ((Argument) value).addOperator(new Operator(VarType.INT,symbolTable.getRegByIndex(ret)));
+        } else if(value instanceof BasicBlock){
+            Symbol syb = symbolTable.getSymbolThis(name,SymbolKind.PARA);
+            if(syb != null){
+                int oldindex = syb.getIndex();
+                int newindex = symbolTable.newMemReg();
+                value = (BasicBlock) value;
+                ((BasicBlock) value).addInstruction(new InsAlloc(symbolTable.getRegByIndex(newindex),VarType.INT));
+                Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(oldindex));
+                Operator op2 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(newindex));
+                ((BasicBlock) value).addInstruction(new InsStore(VarType.INT, op1, op2));
+                symbolTable.pushOnParaIndex(oldindex, newindex);
+            }
+        }
+
         return ret;
     }
 }

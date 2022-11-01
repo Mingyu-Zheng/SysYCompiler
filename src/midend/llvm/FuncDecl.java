@@ -27,7 +27,7 @@ public class FuncDecl extends User{
                 line += typeList.get(i).getTypeName();
             }
         }
-        line += ")";
+        line += ")\n";
         writer.addStr(line);
         return 0;
     }

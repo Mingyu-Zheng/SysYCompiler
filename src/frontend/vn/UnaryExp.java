@@ -173,7 +173,7 @@ public class UnaryExp extends Vn{
             } else if(vn0.getToken().getValue().equals("-")){
                 int lastindex = vns.get(1).RLLVM(symbolTable, value);
                 int newindex = symbolTable.newReg();
-                addUnaryIns(value,newindex,vn0,lastindex);
+                addUnaryIns(value,symbolTable,newindex,vn0,lastindex);
                 return newindex;
             } else {
 
@@ -182,42 +182,100 @@ public class UnaryExp extends Vn{
         } else {
             String name = vn0.getToken().getValue();
             Symbol symbol = symbolTable.getSymbol(name, SymbolKind.FUNC);
+            SymbolFuncType type = symbol.getFuncType();
             int num = symbol.getFuncFParamNum();
-            int[] args = new int[num];
-            //-----------
-
-            int newreg = symbolTable.newReg();
-            addCallIns(value, newreg, symbol.getFuncType(), symbolTable, args);
+            int newreg = -1;
+            if(num != 0){
+                int[] args = new int[num];
+                int index = 0;
+                FuncRParams para = (FuncRParams) vns.get(2);
+                for(Vn vn:para.vns){
+                    if(vn instanceof Exp){
+                        args[index++] = vn.RLLVM(symbolTable,value);
+                    }
+                }
+                if(type.isFuncType(SymbolFuncType.INT)){
+                    newreg = symbolTable.newReg();
+                }
+                addCallIns(value, newreg, symbolTable, name, args);
+            } else {
+                if(type.isFuncType(SymbolFuncType.INT)){
+                    newreg = symbolTable.newReg();
+                }
+                addCallIns(value, newreg, symbolTable, name);
+            }
             return newreg;
         }
     }
 
-    protected void addUnaryIns(Value value, int result, Vn op, int reg){
+    protected void addUnaryIns(Value value, SymbolTable symbolTable, int result, Vn op, int reg){
         if(!(value instanceof BasicBlock)){
             return;
         }
         value = (BasicBlock) value;
         Operator op1 = new Operator(VarType.INT , 0);
-        Operator op2 = new Operator(VarType.INT , Symbol.reg2str(reg));
+        Operator op2 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg));
 
         if(op.getToken().getValue().equals("-")){
-            ((BasicBlock) value).addInstruction(new InsSub(Symbol.reg2str(result), VarType.INT, op1, op2));
+            ((BasicBlock) value).addInstruction(new InsSub(symbolTable.getRegByIndex(result), VarType.INT, op1, op2));
         } else {
-            ((BasicBlock) value).addInstruction(new InsSub(Symbol.reg2str(result), VarType.INT, op1, op2));
+            ((BasicBlock) value).addInstruction(new InsSub(symbolTable.getRegByIndex(result), VarType.INT, op1, op2));
         }
     }
 
-    protected void addCallIns(Value value, int result, SymbolFuncType type,
-                              SymbolTable symbolTable, int...args){
+    protected void addCallIns(Value value, int result,
+                              SymbolTable symbolTable, String name, int...args){
 
         if(!(value instanceof BasicBlock)){
             return;
         }
         value = (BasicBlock) value;
+        VarType type;
+        if(result == -1){
+            type = VarType.VOID;
+        } else {
+            type = VarType.INT;
+        }
+        int num = args.length;
+        if(num != 0){
+            Operator []theargs = new Operator[num];
+            for(int i = 0;i < num;i++){
+                theargs[i] = new Operator(VarType.INT, symbolTable.getRegByIndex(args[i]));
+            }
+            if(result == -1){
+                ((BasicBlock) value).addInstruction(new InsCall(type,name,theargs));
+            } else {
+                ((BasicBlock) value).addInstruction(new InsCall(symbolTable.getRegByIndex(result),type,name,theargs));
+            }
 
+        } else {
+            if(result == -1){
+                ((BasicBlock) value).addInstruction(new InsCall(type,name));
+            } else {
+                ((BasicBlock) value).addInstruction(new InsCall(symbolTable.getRegByIndex(result),type,name));
+            }
 
+        }
 
         return;
 
+    }
+
+    @Override
+    public int computeValue(SymbolTable symbolTable) {
+        Vn vn0 = vns.get(0);
+        if(vn0 instanceof PrimaryExp){
+            return vn0.computeValue(symbolTable);
+        } else if(vn0 instanceof UnaryOp){
+            if(vn0.getToken().getValue().equals("+")){
+                return vns.get(1).computeValue(symbolTable);
+            } else if(vn0.getToken().getValue().equals("-")) {
+                return -vns.get(1).computeValue(symbolTable);
+            } else {
+                return vns.get(1).computeValue(symbolTable);
+            }
+        } else {
+            return 0;
+        }
     }
 }

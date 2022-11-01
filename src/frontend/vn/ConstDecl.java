@@ -2,8 +2,10 @@ package frontend.vn;
 
 import error.Error;
 import error.ErrorType;
+import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.Value;
 
 public class ConstDecl extends Vn{
 
@@ -45,4 +47,6 @@ public class ConstDecl extends Vn{
         }
         return ret;
     }
+
+
 }

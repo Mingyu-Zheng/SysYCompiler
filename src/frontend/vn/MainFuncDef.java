@@ -6,6 +6,7 @@ import frontend.symbol.SymbolFuncType;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.*;
 
 public class MainFuncDef extends Vn{
 
@@ -54,5 +55,21 @@ public class MainFuncDef extends Vn{
             }
         }
         return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        SymbolTable newSymbolTable = symbolTable.newSonTable();
+        value = (ValueMudule) value;
+        ValueFuncDef funcDef = new ValueFuncDef(VarType.INT, vns.get(1).getToken().getValue());
+        ((ValueMudule) value).addFuncDef(funcDef);
+        BasicBlock basicBlock = new BasicBlock();
+        funcDef.addBasicBlock(basicBlock);
+
+        newSymbolTable.setFuncRegNum();
+
+        Vn vnblock = vns.get(4);
+        vnblock.RLLVM(newSymbolTable, basicBlock);
+        return 0;
     }
 }

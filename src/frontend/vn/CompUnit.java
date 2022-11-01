@@ -48,9 +48,16 @@ public class CompUnit extends Vn{
         this.addVn(mainFuncDef);
         return ret;
     }
-    public int RLLVM(SymbolTable symbolTable, Value value){
 
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        for(Vn vn:vns){
+            if(vn instanceof Decl){
+                vn.RLLVM(symbolTable,value,1);
+            } else {
+                vn.RLLVM(symbolTable,value);
+            }
+        }
         return 0;
     }
-
 }

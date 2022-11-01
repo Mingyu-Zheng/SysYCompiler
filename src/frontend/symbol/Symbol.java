@@ -12,8 +12,12 @@ public class Symbol{
     private int funcFParamNum = 0;
     private ArrayList<Symbol> funcParas = new ArrayList<>();
 
+    private int constvalue = 0;
+
     private int regindex = 0;
     private int index = 0;
+
+    private boolean isRegPointer = false;
 
     public Symbol(String symbol, SymbolKind kind){
         this.name = symbol;
@@ -31,6 +35,14 @@ public class Symbol{
         this.regindex = regindex;
     }
 
+    public int getConstvalue() {
+        return constvalue;
+    }
+
+    public void setConstvalue(int constvalue) {
+        this.constvalue = constvalue;
+    }
+
     public int getIndex() {
         return index;
     }
@@ -39,13 +51,25 @@ public class Symbol{
         this.index = index;
     }
 
+    public boolean isRegPointer(){
+        return this.isRegPointer;
+    }
+
+    public void setIsRegPointer(){
+        this.isRegPointer = true;
+    }
+
     public int getRegindex() {
         return regindex;
     }
 
-    public static String reg2str(int regindex){
-        return "%" + String.valueOf(regindex);
+    public void setRegindex(int regindex) {
+        this.regindex = regindex;
     }
+
+    //    public static String reg2str(int regindex){
+//        return "%" + String.valueOf(regindex);
+//    }
 
     public Symbol getFuncPara(int index) {
         if(index >= 0 && index < this.funcParas.size()){

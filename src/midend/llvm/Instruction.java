@@ -23,13 +23,17 @@ public class Instruction extends User{
         this.result = result;
     }
 
+    public String getInsName() {
+        return insName;
+    }
+
     @Override
     public int writeValue(Writer writer) {
         if(op1 == null || op2 == null){
             return -1;
         }
-        String line = "    " + this.result + " = " + this.insName + this.varType.getTypeName()  + " ";
-        line += this.op1.printOperator() + ", " + this.op2.printOperator() + "\n";
+        String line = "    " + this.result + " = " + this.getInsName() + " " + this.varType.getTypeName()  + " ";
+        line += this.op1.printVar() + ", " + this.op2.printVar() + "\n";
         writer.addStr(line);
         return 0;
     }

@@ -7,6 +7,9 @@ import frontend.symbol.SymbolKind;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.*;
+
+import java.util.ArrayList;
 
 public class Stmt extends Vn{
 
@@ -418,5 +421,98 @@ public class Stmt extends Vn{
             }
         }
         return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        int ret = 0;
+        Vn vn0 = vns.get(0);
+        if(vn0.isVt){
+            if(vn0.getToken().isType(TokenType.RETURNTK)){
+                Vn vn1 = vns.get(1);
+                if(vn1 instanceof Exp){
+                    ret = vn1.RLLVM(symbolTable, value);
+                    value = (BasicBlock) value;
+                    ((BasicBlock) value).addInstruction(new InsRet(VarType.INT, symbolTable.getRegByIndex(ret)));
+                } else {
+                    value = (BasicBlock) value;
+                    ((BasicBlock) value).addInstruction(new InsRet(VarType.VOID, ""));
+                }
+            } else if(vn0.getToken().isType(TokenType.WHILETK)){
+                ret = 0;
+            } else if(vn0.getToken().isType(TokenType.IFTK)){
+                ret = 0;
+            } else if(vn0.getToken().isType(TokenType.BREAKTTK)){
+                ret = 0;
+            } else if(vn0.getToken().isType(TokenType.CONTINUETK)){
+                ret = 0;
+            } else if(vn0.getToken().isType(TokenType.PRINTFTK)){
+                Vn vn2 = vns.get(2);
+                String formatString = vn2.getToken().getValue();
+                ArrayList<Integer> rets = new ArrayList<>();
+                for(Vn vn:vns){
+                    if(vn instanceof Exp){
+                        int newindex = vn.RLLVM(symbolTable, value);
+                        rets.add(newindex);
+                    }
+                }
+                this.LLVMprint(symbolTable,value,formatString,rets);
+            }
+        } else {
+            if(vn0 instanceof LVal){
+                Vn vn2 = vns.get(2);
+                ret = vn0.RLLVM(symbolTable,value);
+                if(symbolTable.isIndexPointer(ret)){
+                    if(vn2 instanceof Exp){
+                        int outindex = vns.get(2).RLLVM(symbolTable, value);
+                        Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(outindex));
+                        Operator op2 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(ret));
+                        value = (BasicBlock) value;
+                        ((BasicBlock) value).addInstruction(new InsStore(VarType.INT, op1, op2));
+                    } else {
+                        int newindex = symbolTable.newReg();
+                        value = (BasicBlock) value;
+                        ((BasicBlock) value).addInstruction(new InsCall(symbolTable.getRegByIndex(newindex),
+                                VarType.INT, vn2.getToken().getValue()));
+                        Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(newindex));
+                        Operator op2 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(ret));
+                        ((BasicBlock) value).addInstruction(new InsStore(VarType.INT, op1, op2));
+                    }
+                } else {
+
+                }
+            } else if(vn0 instanceof Exp){
+                ret = vn0.RLLVM(symbolTable,value);
+            } else if(vn0 instanceof Block){
+                ret = vn0.RLLVM(symbolTable, value);
+            }
+        }
+        return ret;
+    }
+
+    public int LLVMprint(SymbolTable symbolTable, Value value, String str, ArrayList<Integer> regs){
+        int index = 0;
+        int reg = -1;
+        int i = 1;
+        value = (BasicBlock) value;
+        while(i < str.length() - 1){
+            char ch = str.charAt(i);
+            if(ch == '%' && i + 1 < str.length() - 1 && str.charAt(i+1) == 'd'){
+                Operator operator = new Operator(VarType.INT, symbolTable.getRegByIndex(regs.get(index)));
+                index++;
+                ((BasicBlock) value).addInstruction(new InsCall(VarType.VOID, "putint",operator));
+                i = i + 2;
+            } else if(ch == '\\' && i + 1 < str.length() - 1 && str.charAt(i + 1) == 'n'){
+                ch = '\n';
+                Operator operator = new Operator(VarType.INT, (int) ch);
+                ((BasicBlock) value).addInstruction(new InsCall(VarType.VOID, "putch",operator));
+                i = i + 2;
+            } else {
+                Operator operator = new Operator(VarType.INT, (int) ch);
+                ((BasicBlock) value).addInstruction(new InsCall(VarType.VOID, "putch",operator));
+                i++;
+            }
+        }
+        return 0;
     }
 }

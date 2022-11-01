@@ -28,6 +28,20 @@ public class Operator extends User{
         return ret;
     }
 
+    public String printType(){
+        return this.varType.getTypeName();
+    }
+
+    public String printVar(){
+        String ret = "";
+        if(this.isConst){
+            ret += String.valueOf(this.varValue);
+        } else {
+            ret += this.varName;
+        }
+        return ret;
+    }
+
     public void setConst() {
         this.isConst = true;
     }

@@ -1,8 +1,10 @@
 package frontend.vn;
 
 import error.Error;
+import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.Value;
 import utils.Writer;
 
 public class Decl extends Vn{
@@ -30,6 +32,10 @@ public class Decl extends Vn{
         }
         return 0;
     }
+
+
+
+
     public int writeVnVt(Writer writer){
         for(Vn vn:this.vns){
             if(vn.IsVt()){

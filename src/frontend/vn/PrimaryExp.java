@@ -5,6 +5,7 @@ import frontend.symbol.Symbol;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.*;
 
 public class PrimaryExp extends Vn{
 
@@ -67,5 +68,47 @@ public class PrimaryExp extends Vn{
             ret = vn0.RAnalysis(symbolTable,symbol);
         }
         return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        Vn vn0 = vns.get(0);
+        int retindex = -1;
+        if(vn0 instanceof LVal){
+            retindex = vn0.RLLVM(symbolTable, value);
+            if(!symbolTable.isIndexPointer(retindex)){
+                return retindex;
+            } else {
+                int newindex = symbolTable.newReg();
+                Operator operator = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(retindex));
+                value = (BasicBlock) value;
+                ((BasicBlock) value).addInstruction(new InsLoad(symbolTable.getRegByIndex(newindex),VarType.INT,operator));
+                retindex = newindex;
+            }
+        } else if(vn0 instanceof Number){
+            int newindex = symbolTable.newReg();
+            int number = ((Number) vn0).getInt();
+            value = (BasicBlock) value;
+            Operator op1 = new Operator(VarType.INT,number);
+            Operator op2 = new Operator(VarType.INT, 0);
+            ((BasicBlock) value).addInstruction(new InsAdd(symbolTable.getRegByIndex(newindex),VarType.INT,op1,op2));
+            return newindex;
+        } else {
+            retindex = vns.get(1).RLLVM(symbolTable,value);
+        }
+        return retindex;
+    }
+
+    @Override
+    public int computeValue(SymbolTable symbolTable) {
+        Vn vn0 = vns.get(0);
+        if(vn0 instanceof LVal){
+            return vn0.computeValue(symbolTable);
+        } else if(vn0 instanceof Number){
+            return ((Number) vn0).getInt();
+        } else {
+            Vn vnadd = vns.get(1).vns.get(0);
+            return vnadd.computeValue(symbolTable);
+        }
     }
 }

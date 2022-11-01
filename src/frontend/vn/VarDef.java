@@ -8,6 +8,7 @@ import frontend.symbol.SymbolTable;
 import frontend.symbol.SymbolType;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.*;
 
 public class VarDef extends Vn{
 
@@ -75,6 +76,87 @@ public class VarDef extends Vn{
         } else {
             symbolTable.addSymbol(symbol);
         }
+        return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        int ret = 0;
+        int newindex = -1;
+        int dim = 0;
+        String name = this.vns.get(0).getToken().getValue();
+        Symbol symbol = new Symbol(name, SymbolKind.VAR);
+        Vn initVal = null;
+        for(Vn vn:this.vns){
+            if(vn.isVt){
+                if(vn.getToken().isType(TokenType.LBRACK)){
+                    dim++;
+                }
+            } else {
+                if(vn instanceof InitVal){
+                    initVal = vn;
+                }
+            }
+        }
+        if(dim == 0){
+            symbol.setType(SymbolType.INT);
+        } else {
+            symbol.setType(SymbolType.ARRAY);
+            symbol.setArrayDim(dim);
+        }
+
+        if(initVal != null){
+            newindex = initVal.RLLVM(symbolTable,value);
+        }
+
+        symbolTable.addSymbolMem2Reg(symbol);
+        ret = symbol.getIndex();
+        value = (BasicBlock) value;
+        ((BasicBlock) value).addInstruction(new InsAlloc(symbolTable.getRegByIndex(ret),VarType.INT));
+        if(initVal != null){
+            Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(newindex));
+            Operator op2 = new Operator(VarType.INT_POINTER,symbolTable.getRegByIndex(ret));
+            ((BasicBlock) value).addInstruction(new InsStore(VarType.INT,op1,op2));
+        }
+        return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value, int isglobal) {
+        int ret = 0;
+        int dim = 0;
+        String name = this.vns.get(0).getToken().getValue();
+        Symbol symbol = new Symbol(name, SymbolKind.VAR);
+        Vn constInitVal = null;
+        int constInitValue = 0;
+
+        for(Vn vn:this.vns){
+            if(vn.isVt){
+                if(vn.getToken().isType(TokenType.LBRACK)){
+                    dim++;
+                }
+            } else {
+                if(vn instanceof InitVal){
+                    constInitVal = vn;
+                }
+            }
+        }
+        if(dim == 0){
+            symbol.setType(SymbolType.INT);
+            if(constInitVal != null){
+                constInitValue = constInitVal.vns.get(0).computeValue(symbolTable);
+            }
+        } else {
+            symbol.setType(SymbolType.ARRAY);
+            symbol.setArrayDim(dim);
+        }
+
+        symbol.setConstvalue(constInitValue);
+        symbolTable.addSymbol2Global(symbol);
+
+        value = (ValueMudule) value;
+        ((ValueMudule) value).addGlobalDecl(new ValueGlobalDecl(name, VarType.INT, constInitValue));
+
         return ret;
     }
 }

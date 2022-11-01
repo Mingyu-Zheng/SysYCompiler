@@ -1,29 +1,40 @@
 package midend.llvm;
 
+import java.util.ArrayList;
+
 public class Argument extends Value{
-    private VarType varType;
-    private String varName;
-    private int varValue;
+    private ArrayList<Operator> arguments = new ArrayList<>();
 
     boolean isConst = false;
 
-    public Argument(VarType varType, String varName){
-        this.varType = varType;
-        this.varName = varName;
+    public Argument(){
+
     }
 
-    public Argument(VarType varType, int varValue){
-        this.varType = varType;
-        this.varValue = varValue;
-        this.isConst = true;
+    public void addOperator(Operator operator){
+        this.arguments.add(operator);
     }
 
     public String printArgument(){
-        String ret = this.varType.getTypeName() + " ";
-        if(this.isConst){
-            ret += String.valueOf(this.varValue);
-        } else {
-            ret += this.varName;
+        String ret = "";
+        if(!arguments.isEmpty()){
+            ret += arguments.get(0).printOperator();
+            for(int i = 1;i < arguments.size();i++){
+                ret += ", ";
+                ret += arguments.get(i).printOperator();
+            }
+        }
+        return ret;
+    }
+
+    public String printArgumentTypes(){
+        String ret = "";
+        if(!arguments.isEmpty()){
+            ret += arguments.get(0).printType();
+            for(int i = 1;i < arguments.size();i++){
+                ret += ", ";
+                ret += arguments.get(i).printType();
+            }
         }
         return ret;
     }

@@ -8,7 +8,7 @@ public class SymbolTable {
     private ArrayList<Symbol> symbols = new ArrayList<>();
     private ArrayList<SymbolTable> sonTables = new ArrayList<>();
 
-    private int regnum = 0;
+    private int regnum = -1;
     private int symbolnum = 0;
 
     public SymbolTable(int depth){
@@ -18,27 +18,44 @@ public class SymbolTable {
     public SymbolTable(SymbolTable parentTable){
         this.parentTable = parentTable;
         this.depth = parentTable.getDepth() + 1;
+        this.regnum = -1;
+        this.symbolnum = parentTable.symbolnum;
     }
 
     public int getDepth(){
         return this.depth;
     }
 
+    public void setFuncRegNum(){
+        this.regnum++;
+    }
+
     public int newReg() {
         regnum++;
         Symbol symbol = new Symbol(regnum);
         symbol.setIndex(symbolnum);
-        this.addSymbol(symbol);
+        this.symbols.add(symbol);
+        return symbolnum++;
+    }
+
+    public int newMemReg() {
+        regnum++;
+        Symbol symbol = new Symbol(regnum);
+        symbol.setIndex(symbolnum);
+        symbol.setIsRegPointer();
+        this.symbols.add(symbol);
         return symbolnum++;
     }
 
     public String getRegByIndex(int index){
         Symbol out = null;
-        for(Symbol symbol: symbols){
-            if(symbol.getIndex() == index){
-                out = symbol;
+        SymbolTable table = this;
+        while(table != null){
+            out = table.getRegbyIndexThis(index);
+            if(out != null){
                 break;
             }
+            table = table.parentTable;
         }
         if(out == null){
             return "";
@@ -50,19 +67,69 @@ public class SymbolTable {
         }
     }
 
+    public void pushOnParaIndex(int oldindex, int newindex){
+        Symbol symbolold = this.getRegbyIndexThis(oldindex);
+        Symbol symbolnew = this.getRegbyIndexThis(newindex);
+        int newregindex = symbolnew.getRegindex();
+        symbolold.setIndex(newindex);
+        symbolold.setRegindex(newregindex);
+        symbolold.setIsRegPointer();
+        this.symbols.remove(symbolnew);
+    }
+
+    public boolean isIndexPointer(int index){
+        SymbolTable table = this;
+        Symbol out = null;
+        while(table != null){
+            out = table.getRegbyIndexThis(index);
+            if(out != null){
+                return out.isRegPointer();
+            }
+            table = table.parentTable;
+        }
+        return false;
+    }
+
+    public Symbol getRegbyIndexThis(int index){
+        Symbol out = null;
+        for(Symbol symbol: symbols){
+            if(symbol.getIndex() == index){
+                out = symbol;
+                break;
+            }
+        }
+        return out;
+    }
+
     public void addSymbol(Symbol symbol){
         symbol.setIndex(symbolnum++);
         this.symbols.add(symbol);
     }
 
-    public void addreg(){
-        this.regnum++;
+//    public void addreg(){
+//        this.regnum++;
+//    }
+
+    public void addSymbol2Global(Symbol symbol){
+        symbol.setIndex(symbolnum++);
+        symbol.setRegindex(-1);
+        symbol.setIsRegPointer();
+        this.symbols.add(symbol);
     }
 
     public void addSymbol2Reg(Symbol symbol){
         symbol.setIndex(symbolnum++);
-        this.symbols.add(symbol);
         this.regnum++;
+        symbol.setRegindex(regnum);
+        this.symbols.add(symbol);
+    }
+
+    public void addSymbolMem2Reg(Symbol symbol){
+        symbol.setIndex(symbolnum++);
+        this.regnum++;
+        symbol.setRegindex(regnum);
+        symbol.setIsRegPointer();
+        this.symbols.add(symbol);
     }
 
     public void addSymbolPara(Symbol symbol){

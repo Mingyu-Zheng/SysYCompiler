@@ -5,6 +5,7 @@ import error.ErrorType;
 import frontend.symbol.*;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.*;
 
 public class FuncDef extends Vn{
 
@@ -99,6 +100,60 @@ public class FuncDef extends Vn{
         if(vnend.RAnalysis(newSymbolTable, symbol.getFuncType().getName()) == -1){
             ret = -1;
         }
+        return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        int ret = 0;
+        int num = 0;
+        String name = this.vns.get(1).getToken().getValue();
+        Symbol symbol = new Symbol(name, SymbolKind.FUNC, SymbolType.INT);
+        String functype = this.vns.get(0).getToken().getValue();
+        if(SymbolFuncType.isFuncType(functype, SymbolFuncType.INT)){
+            symbol.setFuncType(SymbolFuncType.INT);
+        } else {
+            symbol.setFuncType(SymbolFuncType.VOID);
+        }
+
+        if(this.vns.get(3) instanceof FuncFParams){
+            for(Vn vn:this.vns.get(3).vns){
+                if(vn instanceof FuncFParam){
+                    num++;
+                }
+            }
+        }
+        symbol.setFuncFParamNum(num);
+        symbolTable.addSymbol2Global(symbol);
+
+        SymbolTable newSymbolTable = symbolTable.newSonTable();
+        value = (ValueMudule) value;
+        ValueFuncDef funcDef = null;
+        if(symbol.getFuncType().isFuncType(SymbolFuncType.INT)){
+            funcDef = new ValueFuncDef(VarType.INT, vns.get(1).getToken().getValue());
+        } else {
+            funcDef = new ValueFuncDef(VarType.VOID, vns.get(1).getToken().getValue());
+        }
+
+        ((ValueMudule) value).addFuncDef(funcDef);
+
+        BasicBlock basicBlock = new BasicBlock();
+        if(this.vns.get(3) instanceof FuncFParams){
+            vns.get(3).RLLVM(newSymbolTable, funcDef.getArgument());
+            newSymbolTable.setFuncRegNum();
+            vns.get(3).RLLVM(newSymbolTable, basicBlock);
+        } else {
+            newSymbolTable.setFuncRegNum();
+        }
+
+        newSymbolTable.addSymbolPara(symbol);
+        Vn vnend = vns.get(vns.size() - 1);
+
+        funcDef.addBasicBlock(basicBlock);
+        vnend.RLLVM(newSymbolTable, basicBlock);
+
+        funcDef.checkIsVoidRet();
+
         return ret;
     }
 }

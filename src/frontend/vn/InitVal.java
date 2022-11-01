@@ -1,8 +1,10 @@
 package frontend.vn;
 
 import error.Error;
+import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.Value;
 
 public class InitVal extends Vn{
 
@@ -41,6 +43,18 @@ public class InitVal extends Vn{
             } else {
                 this.addToken(token);
             }
+        }
+        return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        int ret = -1;
+        Vn vn0 = vns.get(0);
+        if(vn0 instanceof Exp){
+            ret = vn0.RLLVM(symbolTable, value);
+        } else {
+
         }
         return ret;
     }

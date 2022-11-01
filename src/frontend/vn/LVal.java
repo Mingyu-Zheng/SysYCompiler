@@ -7,6 +7,7 @@ import frontend.symbol.SymbolKind;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.Value;
 
 public class LVal extends Vn{
 
@@ -91,6 +92,42 @@ public class LVal extends Vn{
                     }
                 }
             }
+        }
+        return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        int retindex = -1;
+        if(vns.size() == 1){
+            Vn vn0 = vns.get(0);
+            String name = vn0.getToken().getValue();
+            Symbol symbol = symbolTable.getSymbol(name, SymbolKind.CONST, SymbolKind.VAR, SymbolKind.PARA);
+            if(symbol == null){
+                return -1;
+            }
+            retindex = symbol.getIndex();
+        } else if(vns.size() <= 4){
+
+        } else {
+
+        }
+        return retindex;
+    }
+
+    @Override
+    public int computeValue(SymbolTable symbolTable) {
+        int ret = 0;
+        if(vns.size() == 1){
+            String name = vns.get(0).getToken().getValue();
+            Symbol symbol = symbolTable.getSymbol(name, SymbolKind.CONST);
+            if(symbol == null){
+                ret = -1;
+            } else {
+                ret = symbol.getConstvalue();
+            }
+        } else {
+
         }
         return ret;
     }

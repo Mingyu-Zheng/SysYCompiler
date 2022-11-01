@@ -74,12 +74,14 @@ public class MulExp extends Vn{
         for(Vn vn:vns){
             if(!vn.isVt){
                 ansreg = vn.RLLVM(symbolTable,value);
-                if(lastreg != -1){
-                    int newreg = symbolTable.newReg();
-                    addInstruction(value,symbolTable,newreg,op,lastreg,ansreg);
-                    lastreg = newreg;
-                } else {
-                    lastreg = ansreg;
+                if(ansreg != -1){
+                    if(lastreg != -1){
+                        int newreg = symbolTable.newReg();
+                        addInstruction(value,symbolTable,newreg,op,lastreg,ansreg);
+                        lastreg = newreg;
+                    } else {
+                        lastreg = ansreg;
+                    }
                 }
             } else {
                 op = vn;
@@ -95,14 +97,41 @@ public class MulExp extends Vn{
         }
         value = (BasicBlock) value;
         Operator op1 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg1));
-        Operator op2 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg1));
+        Operator op2 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg2));
 
         if(op.getToken().getValue().equals("*")){
-            ((BasicBlock) value).addInstruction(new InsMul(Symbol.reg2str(result), VarType.INT, op1, op2));
+            ((BasicBlock) value).addInstruction(new InsMul(symbolTable.getRegByIndex(result), VarType.INT, op1, op2));
         } else if(op.getToken().getValue().equals("/")) {
-            ((BasicBlock) value).addInstruction(new InsSdiv(Symbol.reg2str(result), VarType.INT, op1, op2));
+            ((BasicBlock) value).addInstruction(new InsSdiv(symbolTable.getRegByIndex(result), VarType.INT, op1, op2));
         } else {
-            ((BasicBlock) value).addInstruction(new InsSrem(Symbol.reg2str(result), VarType.INT, op1, op2));
+            ((BasicBlock) value).addInstruction(new InsSrem(symbolTable.getRegByIndex(result), VarType.INT, op1, op2));
         }
     }
+
+    public int computeValue(SymbolTable symbolTable){
+        int lastvalue = 0;
+        int ans = 0;
+        Vn op = null;
+
+        for(Vn vn:vns){
+            if(!vn.isVt){
+                ans = vn.computeValue(symbolTable);
+                if(op == null){
+                    lastvalue = ans;
+                } else {
+                    if(op.getToken().getValue().equals("*")){
+                        lastvalue = lastvalue * ans;
+                    } else if(op.getToken().getValue().equals("/")) {
+                        lastvalue = lastvalue / ans;
+                    } else {
+                        lastvalue = lastvalue % ans;
+                    }
+                }
+            } else {
+                op = vn;
+            }
+        }
+        return lastvalue;
+    }
+
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import frontend.symbol.Symbol;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
-import midend.llvm.Mudule;
 import midend.llvm.Value;
 import utils.Writer;
 
@@ -130,11 +129,25 @@ public class Vn{
     }
 
     public int RLLVM(SymbolTable symbolTable, Value value){
+        int ret = 0;
         for(Vn vn:vns){
-            if(!vn.isVt){
-                RLLVM(symbolTable, value);
+            if(!vn.isVt && !(vn instanceof Btype)){
+                ret = vn.RLLVM(symbolTable, value);
             }
         }
+        return ret;
+    }
+
+    public int RLLVM(SymbolTable symbolTable, Value value, int isglobal) {
+        for(Vn vn:vns){
+            if(!vn.isVt && !(vn instanceof Btype)){
+                vn.RLLVM(symbolTable, value, isglobal);
+            }
+        }
+        return 0;
+    }
+
+    public int computeValue(SymbolTable symbolTable){
         return 0;
     }
 
