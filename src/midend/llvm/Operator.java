@@ -23,7 +23,7 @@ public class Operator extends User{
         if(this.isConst){
             ret += String.valueOf(this.varValue);
         } else {
-            ret += this.varName;
+            ret += this.getVarName();
         }
         return ret;
     }
@@ -37,7 +37,7 @@ public class Operator extends User{
         if(this.isConst){
             ret += String.valueOf(this.varValue);
         } else {
-            ret += this.varName;
+            ret += this.getVarName();
         }
         return ret;
     }
@@ -48,5 +48,9 @@ public class Operator extends User{
 
     public boolean isConst() {
         return this.isConst;
+    }
+
+    public String getVarName(){
+        return this.varName;
     }
 }

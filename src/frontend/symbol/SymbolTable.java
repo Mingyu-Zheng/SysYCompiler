@@ -10,6 +10,11 @@ public class SymbolTable {
 
     private int regnum = -1;
     private int symbolnum = 0;
+    private int strnum = 0;
+
+    public ArrayList<Symbol> getSymbols(){
+        return this.symbols;
+    }
 
     public SymbolTable(int depth){
         this.depth = depth;
@@ -24,6 +29,26 @@ public class SymbolTable {
 
     public int getDepth(){
         return this.depth;
+    }
+
+    public int getStrnum(){
+        SymbolTable st = this;
+        while (st.parentTable != null){
+            st = st.parentTable;
+        }
+        return st.strnum;
+    }
+
+    public void addStrnum(){
+        SymbolTable st = this;
+        while (st.parentTable != null){
+            st = st.parentTable;
+        }
+        st.strnum++;
+    }
+
+    public int getSymbolnum() {
+        return symbolnum;
     }
 
     public void setFuncRegNum(){
@@ -138,6 +163,14 @@ public class SymbolTable {
         }
     }
 
+    public void addSymbol2Root(Symbol symbol){
+        SymbolTable st = this;
+        while(st.parentTable != null){
+            st = st.parentTable;
+        }
+        st.addSymbol(symbol);
+    }
+
     public SymbolTable newSonTable(){
         SymbolTable table = new SymbolTable(this);
         this.sonTables.add(table);
@@ -196,6 +229,8 @@ public class SymbolTable {
         }
         return null;
     }
+
+
 }
 
 

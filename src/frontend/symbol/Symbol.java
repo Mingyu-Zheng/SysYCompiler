@@ -8,6 +8,9 @@ public class Symbol{
     private SymbolType type;
 
     private int arrayDim = 0;
+    private ArrayList<Integer> dimarray = new ArrayList<>();
+    private int[] arrayValue = null;
+
     private SymbolFuncType funcType;
     private int funcFParamNum = 0;
     private ArrayList<Symbol> funcParas = new ArrayList<>();
@@ -19,10 +22,11 @@ public class Symbol{
 
     private boolean isRegPointer = false;
 
+    private String strContent = "";
+
     public Symbol(String symbol, SymbolKind kind){
         this.name = symbol;
         this.kind = kind;
-        this.type = type;
     }
 
     public Symbol(String symbol, SymbolKind kind, SymbolType type){
@@ -35,12 +39,36 @@ public class Symbol{
         this.regindex = regindex;
     }
 
+    public String getStrContent() {
+        return strContent;
+    }
+
+    public void setStrContent(String strContent) {
+        this.strContent = strContent;
+    }
+
     public int getConstvalue() {
         return constvalue;
     }
 
     public void setConstvalue(int constvalue) {
         this.constvalue = constvalue;
+    }
+
+    public ArrayList<Integer> getDimarray() {
+        return dimarray;
+    }
+
+    public void setDimarray(ArrayList<Integer> dimarray) {
+        this.dimarray = dimarray;
+    }
+
+    public int[] getArrayValue() {
+        return arrayValue;
+    }
+
+    public void setArrayValue(int[] arrayValue) {
+        this.arrayValue = arrayValue;
     }
 
     public int getIndex() {

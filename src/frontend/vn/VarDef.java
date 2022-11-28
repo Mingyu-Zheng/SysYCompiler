@@ -155,7 +155,7 @@ public class VarDef extends Vn{
         symbolTable.addSymbol2Global(symbol);
 
         value = (ValueMudule) value;
-        ((ValueMudule) value).addGlobalDecl(new ValueGlobalDecl(name, VarType.INT, constInitValue));
+        ((ValueMudule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.INT, constInitValue));
 
         return ret;
     }

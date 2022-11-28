@@ -5,7 +5,7 @@ import frontend.symbol.SymbolTable;
 public class ConstExp extends Vn{
 
     public ConstExp(){
-        super("<frontend.vn.ConstExp>");
+        super("<ConstExp>");
     }
     public int RConstExp(){
         AddExp addExp = new AddExp();

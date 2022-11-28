@@ -5,6 +5,7 @@ import error.ErrorType;
 import frontend.symbol.Symbol;
 import frontend.symbol.SymbolKind;
 import frontend.symbol.SymbolTable;
+import frontend.symbol.SymbolType;
 import frontend.token.Token;
 import frontend.token.TokenType;
 import midend.llvm.*;
@@ -494,22 +495,44 @@ public class Stmt extends Vn{
         int index = 0;
         int reg = -1;
         int i = 1;
+        int j = 1;
         value = (BasicBlock) value;
         while(i < str.length() - 1){
             char ch = str.charAt(i);
             if(ch == '%' && i + 1 < str.length() - 1 && str.charAt(i+1) == 'd'){
+                if(j < i){
+                    String strContent = "\"" + str.substring(j, i) + "\"";
+                    int strNum = symbolTable.getStrnum();
+                    String symname = "0s" + strNum;
+                    Symbol symbol = new Symbol(symname, SymbolKind.CONST);
+                    symbol.setStrContent(strContent);
+                    symbol.setType(SymbolType.STR);
+                    symbolTable.addSymbol2Root(symbol);
+                    symbolTable.addStrnum();
+                    Operator operator = new Operator(VarType.STR, "@" + symname);
+                    ((BasicBlock) value).addInstruction(new InsCall(VarType.VOID, "0putstr",operator));
+                }
                 Operator operator = new Operator(VarType.INT, symbolTable.getRegByIndex(regs.get(index)));
                 index++;
-                ((BasicBlock) value).addInstruction(new InsCall(VarType.VOID, "putint",operator));
+                ((BasicBlock) value).addInstruction(new InsCall(VarType.VOID, "0putint",operator));
                 i = i + 2;
-            } else if(ch == '\\' && i + 1 < str.length() - 1 && str.charAt(i + 1) == 'n'){
-                ch = '\n';
-                Operator operator = new Operator(VarType.INT, (int) ch);
-                ((BasicBlock) value).addInstruction(new InsCall(VarType.VOID, "putch",operator));
-                i = i + 2;
+                j = i;
+            } else if(i + 1 == str.length() - 1){
+                if(j < i){
+                    String strContent = "\"" + str.substring(j, i + 1) + "\"";
+                    int strNum = symbolTable.getStrnum();
+                    String symname = "0s" + strNum;
+                    Symbol symbol = new Symbol(symname, SymbolKind.CONST);
+                    symbol.setStrContent(strContent);
+                    symbol.setType(SymbolType.STR);
+                    symbolTable.addSymbol2Root(symbol);
+                    symbolTable.addStrnum();
+                    Operator operator = new Operator(VarType.STR, "@" + symname);
+                    ((BasicBlock) value).addInstruction(new InsCall(VarType.VOID, "0putstr", operator));
+                }
+                i++;
+                j = i;
             } else {
-                Operator operator = new Operator(VarType.INT, (int) ch);
-                ((BasicBlock) value).addInstruction(new InsCall(VarType.VOID, "putch",operator));
                 i++;
             }
         }

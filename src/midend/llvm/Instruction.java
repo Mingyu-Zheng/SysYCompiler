@@ -11,6 +11,7 @@ public class Instruction extends User{
     protected VarType varType = VarType.INT;
     protected Operator op1 = null;
     protected Operator op2 = null;
+    protected int i16 = 0;
 
     public Instruction(){
 

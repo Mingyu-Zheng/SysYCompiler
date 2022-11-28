@@ -9,6 +9,9 @@ public class InsCall extends Instruction{
     private String symbolName = "@";
     private ArrayList<Operator> operators = new ArrayList<>();
 
+    public String getSymbolName() {
+        return this.symbolName;
+    }
 
     public InsCall(String result, VarType varType, String symbolName, Operator...arguments){
         super();
@@ -29,6 +32,7 @@ public class InsCall extends Instruction{
         }
     }
 
+
     @Override
     public int writeValue(Writer writer) {
         String line = "    ";
@@ -36,7 +40,7 @@ public class InsCall extends Instruction{
             line += this.result + " = ";
         }
         line += this.insName + " " ;
-        line += this.varType.getTypeName() + " " + this.symbolName  + "(";
+        line += this.varType.getTypeName() + " " + this.getSymbolName()  + "(";
         if(!operators.isEmpty()){
             line += operators.get(0).printOperator();
             for(int i = 1; i < operators.size(); i++){

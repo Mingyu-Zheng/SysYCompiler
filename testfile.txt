@@ -1,12 +1,15 @@
 const int ga = 1;
 const int gb = 2 - 4, gc = 2 * 4;
 const int gd = +2 * -4, ge = +20 / (-4 * -4), gf = 1 + 2 - 3 * 4 / 5 % 6;
+const int garr[2] = {1, 2};
+const int garr2[3][2] = {{1 ,2},{3, 4},{5, 6}};
 
-int gwxy = 1;
-int gorz = ga + gb, gqwe = ga + gb - gc;
+// int gwxy = 1;
+// int gorz = ga + gb, gqwe = ga + gb - gc;
 int gw11 = ga * gb, gx11 = ga / gb * gc, gy11 = (ga + gb) * (gc - gd) % ge / gf;
 
 int func1() {
+    const int garr3[2] = {1, 2};
     return 123;
 }
 

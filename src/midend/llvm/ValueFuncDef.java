@@ -21,7 +21,7 @@ public class ValueFuncDef extends User{
     }
 
     public void setSymbolName(String funcName) {
-        this.symbolName = "@" + funcName;
+        this.symbolName = funcName;
     }
 
     public VarType getRetType() {
@@ -57,7 +57,7 @@ public class ValueFuncDef extends User{
 
     @Override
     public int writeValue(Writer writer) {
-        String header = "define" + " " + retType.getTypeName() + " " + this.symbolName + "(" ;
+        String header = "define" + " " + retType.getTypeName() + " " + this.getSymbolName() + "(" ;
         header += this.argument.printArgumentTypes();
         header += ") {\n";
         writer.addStr(header);

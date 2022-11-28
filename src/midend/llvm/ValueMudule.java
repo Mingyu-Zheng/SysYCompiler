@@ -6,19 +6,19 @@ import java.util.ArrayList;
 
 public class ValueMudule extends Value{
     protected ArrayList<FuncDecl> funcDecls = new ArrayList<>();
-    protected ArrayList<ValueGlobalDecl> globalDecls = new ArrayList<>();
+    protected ArrayList<ValueGlobalDef> globalDecls = new ArrayList<>();
     protected ArrayList<ValueFuncDef> funcDefs = new ArrayList<>();
 
     public ValueMudule(){
-        FuncDecl getint = new FuncDecl(VarType.INT,"getint");
-        FuncDecl putint = new FuncDecl(VarType.VOID, "putint", VarType.INT);
-        FuncDecl putch = new FuncDecl(VarType.VOID, "putch", VarType.INT);
-        this.funcDecls.add(getint);
-        this.funcDecls.add(putint);
-        this.funcDecls.add(putch);
+//        FuncDecl getint = new FuncDecl(VarType.INT,"getint");
+//        FuncDecl putint = new FuncDecl(VarType.VOID, "putint", VarType.INT);
+//        FuncDecl putch = new FuncDecl(VarType.VOID, "putch", VarType.INT);
+//        this.funcDecls.add(getint);
+//        this.funcDecls.add(putint);
+//        this.funcDecls.add(putch);
     }
 
-    public void addGlobalDecl(ValueGlobalDecl globalDecl){
+    public void addGlobalDecl(ValueGlobalDef globalDecl){
         this.globalDecls.add(globalDecl);
     }
 
@@ -36,7 +36,7 @@ public class ValueMudule extends Value{
             funcDecl.writeValue(writer);
         }
         writer.addStr("\n");
-        for(ValueGlobalDecl globalDecl:globalDecls){
+        for(ValueGlobalDef globalDecl:globalDecls){
             globalDecl.writeValue(writer);
         }
         writer.addStr("\n");

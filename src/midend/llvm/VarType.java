@@ -7,6 +7,7 @@ public enum VarType{
     VOID("void"),
     LABEL("label"),
     INT_POINTER("i32*"),
+    STR("str"),
     ARRAY("array"),
     ;
     private String typeName;
