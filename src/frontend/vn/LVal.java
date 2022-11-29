@@ -7,12 +7,15 @@ import frontend.symbol.SymbolKind;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
-import midend.llvm.Value;
+import midend.llvm.*;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class LVal extends Vn{
 
     public LVal(){
-        super("<frontend.vn.LVal>");
+        super("<LVal>");
     }
     public int RLVal(){
         int ret = 0;
@@ -99,18 +102,93 @@ public class LVal extends Vn{
     @Override
     public int RLLVM(SymbolTable symbolTable, Value value) {
         int retindex = -1;
+        Vn vn0 = vns.get(0);
+        String name = vn0.getToken().getValue();
+        Symbol symbol = symbolTable.getSymbol(name, SymbolKind.CONST, SymbolKind.VAR, SymbolKind.PARA);
         if(vns.size() == 1){
-            Vn vn0 = vns.get(0);
-            String name = vn0.getToken().getValue();
-            Symbol symbol = symbolTable.getSymbol(name, SymbolKind.CONST, SymbolKind.VAR, SymbolKind.PARA);
             if(symbol == null){
                 return -1;
             }
             retindex = symbol.getIndex();
+            if(symbol.isArray()){
+                if(symbol.isGlobal()){
+                    Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
+                    retindex = symbolTable.newMemReg();
+                    ((BasicBlock) value).addInstruction(new InsLa(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER,operator));
+                }
+            }
         } else if(vns.size() <= 4){
-
+            ArrayList<Integer> dimarr = symbol.getDimarray();
+            retindex = symbol.getIndex();
+            int retmul = -1;
+            int retadd = -1;
+            int retans = -1;
+            if(symbol.isGlobal()){
+                Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
+                retindex = symbolTable.newReg();
+                ((BasicBlock) value).addInstruction(new InsLa(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER,operator));
+            }
+            int rettmp = -1;
+            for(Vn vn:vns){
+                if(vn instanceof Exp){
+                    rettmp = vn.RLLVM(symbolTable, value);
+                }
+            }
+            int sz = 4;
+            if(dimarr.size() > 1){
+                sz = sz * dimarr.get(1);
+                retmul = symbolTable.newReg();
+                Operator op1 = new Operator(VarType.INT , symbolTable.getRegByIndex(rettmp));
+                Operator op2 = new Operator(VarType.INT , sz);
+                ((BasicBlock) value).addInstruction(new InsMul(symbolTable.getRegByIndex(retmul), VarType.INT, op1, op2));
+                retans = symbolTable.newMemReg();
+                Operator op3 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(retindex));
+                Operator op4 = new Operator(VarType.INT, symbolTable.getRegByIndex(retmul));
+                ((BasicBlock) value).addInstruction(new InsAdd(symbolTable.getRegByIndex(retans), VarType.INT_POINTER, op3, op4));
+                retindex = retans;
+            } else {
+                retmul = symbolTable.newReg();
+                Operator op1 = new Operator(VarType.INT , symbolTable.getRegByIndex(rettmp));
+                Operator op2 = new Operator(VarType.INT , sz);
+                ((BasicBlock) value).addInstruction(new InsMul(symbolTable.getRegByIndex(retmul), VarType.INT, op1, op2));
+                retadd = symbolTable.newMemReg();
+                Operator op3 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(retindex));
+                Operator op4 = new Operator(VarType.INT, symbolTable.getRegByIndex(retmul));
+                ((BasicBlock) value).addInstruction(new InsAdd(symbolTable.getRegByIndex(retadd), VarType.INT_POINTER, op3, op4));
+                retindex = retadd;
+            }
         } else {
-
+            ArrayList<Integer> dimarr = symbol.getDimarray();
+            retindex = symbol.getIndex();
+            if(symbol.isGlobal()){
+                Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
+                retindex = symbolTable.newReg();
+                ((BasicBlock) value).addInstruction(new InsLa(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER,operator));
+            }
+            ArrayList<Integer> retarr = new ArrayList<>();
+            for(Vn vn:vns){
+                if(vn instanceof Exp){
+                    int rettmp = vn.RLLVM(symbolTable, value);
+                    retarr.add(rettmp);
+                }
+            }
+            int retmul1 = symbolTable.newReg();
+            Operator op1 = new Operator(VarType.INT , symbolTable.getRegByIndex(retarr.get(0)));
+            Operator op2 = new Operator(VarType.INT , dimarr.get(1));
+            ((BasicBlock) value).addInstruction(new InsMul(symbolTable.getRegByIndex(retmul1), VarType.INT, op1, op2));
+            int retadd1 = symbolTable.newReg();
+            Operator op3 = new Operator(VarType.INT, symbolTable.getRegByIndex(retmul1));
+            Operator op4 = new Operator(VarType.INT, symbolTable.getRegByIndex(retarr.get(1)));
+            ((BasicBlock) value).addInstruction(new InsAdd(symbolTable.getRegByIndex(retadd1), VarType.INT, op3, op4));
+            int retmul2 = symbolTable.newReg();
+            Operator op5 = new Operator(VarType.INT, symbolTable.getRegByIndex(retadd1));
+            Operator op6 = new Operator(VarType.INT, 4);
+            ((BasicBlock) value).addInstruction(new InsMul(symbolTable.getRegByIndex(retmul2), VarType.INT, op5, op6));
+            int retadd2 = symbolTable.newMemReg();
+            Operator op7 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(retindex));
+            Operator op8 = new Operator(VarType.INT, symbolTable.getRegByIndex(retmul2));
+            ((BasicBlock) value).addInstruction(new InsAdd(symbolTable.getRegByIndex(retadd2),VarType.INT_POINTER,op7, op8));
+            retindex = retadd2;
         }
         return retindex;
     }
@@ -118,16 +196,35 @@ public class LVal extends Vn{
     @Override
     public int computeValue(SymbolTable symbolTable) {
         int ret = 0;
+        String name = vns.get(0).getToken().getValue();
+        Symbol symbol = symbolTable.getSymbol(name, SymbolKind.CONST, SymbolKind.VAR);
         if(vns.size() == 1){
-            String name = vns.get(0).getToken().getValue();
-            Symbol symbol = symbolTable.getSymbol(name, SymbolKind.CONST);
             if(symbol == null){
                 ret = -1;
             } else {
                 ret = symbol.getConstvalue();
             }
         } else {
-
+            if(symbol == null){
+                ret = -1;
+            } else {
+                ArrayList<Integer> posarr = new ArrayList<>();
+                for(Vn vn:vns){
+                    if (vn instanceof Exp){
+                        posarr.add(vn.computeValue(symbolTable));
+                    }
+                }
+                int sz = 1;
+                if(symbol.getDimarray().size() > 1){
+                    sz = symbol.getDimarray().get(1);
+                }
+                int[] array = symbol.getArrayValue();
+                if(posarr.size() == 1){
+                    ret = array[posarr.get(0)];
+                } else if(posarr.size() > 1){
+                    ret = array[posarr.get(0) * sz + posarr.get(1)];
+                }
+            }
         }
         return ret;
     }

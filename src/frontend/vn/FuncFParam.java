@@ -10,6 +10,8 @@ import frontend.token.Token;
 import frontend.token.TokenType;
 import midend.llvm.*;
 
+import java.util.ArrayList;
+
 public class FuncFParam extends Vn{
 
     public FuncFParam(){
@@ -94,31 +96,50 @@ public class FuncFParam extends Vn{
         return ret;
     }
 
+    protected int dimProcess(ArrayList<Integer> dimarr, SymbolTable symbolTable){
+        int dim = 0;
+        for(Vn vn:this.vns){
+            if(vn.isVt){
+                if(vn.getToken().isType(TokenType.LBRACK)){
+                    if(dim == 0){
+                        dimarr.add(1);
+                    }
+                    dim++;
+                }
+            } else {
+                if(vn instanceof ConstExp){
+                    int size = ((ConstExp) vn).computeValue(symbolTable);
+                    dimarr.add(size);
+                }
+            }
+        }
+
+        return dim;
+    }
+
     @Override
     public int RLLVM(SymbolTable symbolTable, Value value) {
         int ret = 0;
         int dim = 0;
         String name = this.vns.get(1).getToken().getValue();
+        ArrayList<Integer> dimarr = new ArrayList<>();
+        dim = dimProcess(dimarr, symbolTable);
+
         if(value instanceof Argument){
             Symbol symbol = new Symbol(name, SymbolKind.PARA);
-            for(Vn vn:this.vns){
-                if(vn.isVt){
-                    if(vn.getToken().isType(TokenType.LBRACK)){
-                        dim++;
-                    }
-                }
-            }
             if(dim == 0){
                 symbol.setType(SymbolType.INT);
+                symbolTable.addSymbol2Reg(symbol);
+                ret = symbol.getIndex();
+                ((Argument) value).addOperator(new Operator(VarType.INT,symbolTable.getRegByIndex(ret)));
             } else {
                 symbol.setType(SymbolType.ARRAY);
                 symbol.setArrayDim(dim);
+                symbol.setDimarray(dimarr);
+                symbolTable.addSymbol2Reg(symbol);
+                ret = symbol.getIndex();
+                ((Argument) value).addOperator(new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(ret)));
             }
-
-            symbolTable.addSymbol2Reg(symbol);
-            ret = symbol.getIndex();
-            value = (Argument) value;
-            ((Argument) value).addOperator(new Operator(VarType.INT,symbolTable.getRegByIndex(ret)));
         } else if(value instanceof BasicBlock){
             Symbol syb = symbolTable.getSymbolThis(name,SymbolKind.PARA);
             if(syb != null){
@@ -126,9 +147,15 @@ public class FuncFParam extends Vn{
                 int newindex = symbolTable.newMemReg();
                 value = (BasicBlock) value;
                 ((BasicBlock) value).addInstruction(new InsAlloc(symbolTable.getRegByIndex(newindex),VarType.INT));
-                Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(oldindex));
-                Operator op2 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(newindex));
-                ((BasicBlock) value).addInstruction(new InsStore(VarType.INT, op1, op2));
+//                Operator op1 = null;
+//                Operator op2 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(newindex));
+//                if (dim == 0){
+//                    op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(oldindex));
+//                    ((BasicBlock) value).addInstruction(new InsStore(VarType.INT, op1, op2));
+//                } else {
+//                    op1 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(oldindex));
+//                    ((BasicBlock) value).addInstruction(new InsStore(VarType.INT_POINTER, op1, op2));
+//                }
                 symbolTable.pushOnParaIndex(oldindex, newindex);
             }
         }

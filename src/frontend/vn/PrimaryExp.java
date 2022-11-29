@@ -76,15 +76,11 @@ public class PrimaryExp extends Vn{
         int retindex = -1;
         if(vn0 instanceof LVal){
             retindex = vn0.RLLVM(symbolTable, value);
-            if(!symbolTable.isIndexPointer(retindex)){
-                return retindex;
-            } else {
-                int newindex = symbolTable.newReg();
-                Operator operator = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(retindex));
-                value = (BasicBlock) value;
-                ((BasicBlock) value).addInstruction(new InsLoad(symbolTable.getRegByIndex(newindex),VarType.INT,operator));
-                retindex = newindex;
-            }
+            int newindex = symbolTable.newReg();
+            Operator operator = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(retindex));
+            value = (BasicBlock) value;
+            ((BasicBlock) value).addInstruction(new InsLoad(symbolTable.getRegByIndex(newindex),VarType.INT,operator));
+            retindex = newindex;
         } else if(vn0 instanceof Number){
             int newindex = symbolTable.newReg();
             int number = ((Number) vn0).getInt();

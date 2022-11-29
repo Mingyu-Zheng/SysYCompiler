@@ -2,14 +2,35 @@ const int ga = 1;
 const int gb = 2 - 4, gc = 2 * 4;
 const int gd = +2 * -4, ge = +20 / (-4 * -4), gf = 1 + 2 - 3 * 4 / 5 % 6;
 const int garr[2] = {1, 2};
+const int garr1[3] = {ga, gb, gc};
 const int garr2[3][2] = {{1 ,2},{3, 4},{5, 6}};
 
-// int gwxy = 1;
-// int gorz = ga + gb, gqwe = ga + gb - gc;
+int gwxy = 1;
+int gorz = ga + gb, gqwe = ga + gb - gc;
 int gw11 = ga * gb, gx11 = ga / gb * gc, gy11 = (ga + gb) * (gc - gd) % ge / gf;
+int gnarr[2];
+int gnarr1[3] = {1, 2 ,3};
+int gnarr4[3] = {gwxy, gorz, gqwe};
+int gnarr5[2][2] = {{garr[0],garr2[1][0]},{gwxy,gnarr4[2]}} //{1,3},{1,-9}
+
+int tfunc1(int tta[][2], int ttb[], int ttc){
+    int tta1 = tta[1][1];
+    int ttb1 = ttb[0];
+    int ttc1 = ttc + tta1 + ttb1;
+    return ttc1;
+}
+
+int tfunc2(){
+    int tta1 = tfunc1(gnarr5, gnarr5[1], gnarr5[0][1]); //-9 + 1 + 3 = -5
+    int tta2 = tfunc1(gnarr5, gnarr5[1], gnarr5[0][1] + gnarr4[1] + gw11); //-9 + 1 + (3 + -1 + -2) = -8
+    return tta1;
+}
 
 int func1() {
     const int garr3[2] = {1, 2};
+    int gnarrn1[2] = {gwxy, gorz};
+    gwxy = 2;
+    gnarr5[0][1] = 2;
     return 123;
 }
 

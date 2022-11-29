@@ -188,4 +188,12 @@ public class Symbol{
     public boolean isPara() {
         return isKindOf(SymbolKind.PARA);
     }
+
+    public boolean isGlobal(){
+        if(this.regindex == -1){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

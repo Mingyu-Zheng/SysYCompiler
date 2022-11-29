@@ -191,7 +191,16 @@ public class UnaryExp extends Vn{
                 FuncRParams para = (FuncRParams) vns.get(2);
                 for(Vn vn:para.vns){
                     if(vn instanceof Exp){
-                        args[index++] = vn.RLLVM(symbolTable,value);
+                        Symbol funcpara = symbol.getFuncPara(index);
+                        if(funcpara != null && funcpara.isArray()){
+                            Vn vnlval = vn;
+                            while(!(vnlval instanceof LVal)){
+                                vnlval = vnlval.vns.get(0);
+                            }
+                            args[index++] = vnlval.RLLVM(symbolTable,value);
+                        } else {
+                            args[index++] = vn.RLLVM(symbolTable,value);
+                        }
                     }
                 }
                 if(type.isFuncType(SymbolFuncType.INT)){
@@ -240,14 +249,17 @@ public class UnaryExp extends Vn{
         if(num != 0){
             Operator []theargs = new Operator[num];
             for(int i = 0;i < num;i++){
-                theargs[i] = new Operator(VarType.INT, symbolTable.getRegByIndex(args[i]));
+                if(symbolTable.isIndexPointer(args[i])){
+                    theargs[i] = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(args[i]));
+                } else {
+                    theargs[i] = new Operator(VarType.INT, symbolTable.getRegByIndex(args[i]));
+                }
             }
             if(result == -1){
                 ((BasicBlock) value).addInstruction(new InsCall(type,name,theargs));
             } else {
                 ((BasicBlock) value).addInstruction(new InsCall(symbolTable.getRegByIndex(result),type,name,theargs));
             }
-
         } else {
             if(result == -1){
                 ((BasicBlock) value).addInstruction(new InsCall(type,name));

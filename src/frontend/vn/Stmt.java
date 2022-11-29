@@ -463,24 +463,20 @@ public class Stmt extends Vn{
             if(vn0 instanceof LVal){
                 Vn vn2 = vns.get(2);
                 ret = vn0.RLLVM(symbolTable,value);
-                if(symbolTable.isIndexPointer(ret)){
-                    if(vn2 instanceof Exp){
-                        int outindex = vns.get(2).RLLVM(symbolTable, value);
-                        Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(outindex));
-                        Operator op2 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(ret));
-                        value = (BasicBlock) value;
-                        ((BasicBlock) value).addInstruction(new InsStore(VarType.INT, op1, op2));
-                    } else {
-                        int newindex = symbolTable.newReg();
-                        value = (BasicBlock) value;
-                        ((BasicBlock) value).addInstruction(new InsCall(symbolTable.getRegByIndex(newindex),
-                                VarType.INT, vn2.getToken().getValue()));
-                        Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(newindex));
-                        Operator op2 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(ret));
-                        ((BasicBlock) value).addInstruction(new InsStore(VarType.INT, op1, op2));
-                    }
+                if(vn2 instanceof Exp){
+                    int outindex = vns.get(2).RLLVM(symbolTable, value);
+                    Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(outindex));
+                    Operator op2 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(ret));
+                    value = (BasicBlock) value;
+                    ((BasicBlock) value).addInstruction(new InsStore(VarType.INT, op1, op2));
                 } else {
-
+                    int newindex = symbolTable.newReg();
+                    value = (BasicBlock) value;
+                    ((BasicBlock) value).addInstruction(new InsCall(symbolTable.getRegByIndex(newindex),
+                            VarType.INT, vn2.getToken().getValue()));
+                    Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(newindex));
+                    Operator op2 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(ret));
+                    ((BasicBlock) value).addInstruction(new InsStore(VarType.INT, op1, op2));
                 }
             } else if(vn0 instanceof Exp){
                 ret = vn0.RLLVM(symbolTable,value);
