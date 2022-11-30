@@ -181,15 +181,15 @@ public class ConstDef extends Vn{
             }
         }
 
-        value = (ValueMudule) value;
+        value = (ValueModule) value;
         if(dim == 0){
             constInitValue = valueProcess(dim, symbol, constInitVal, symbolTable);
             symbolTable.addSymbol2Global(symbol);
-            ((ValueMudule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.INT, constInitValue));
+            ((ValueModule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.INT, constInitValue));
         } else {
             array = valueProcess(dim, symbol, constInitVal, symbolTable, dimarr);
             symbolTable.addSymbol2Global(symbol);
-            ((ValueMudule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.ARRAY, array));
+            ((ValueModule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.ARRAY, array));
         }
         return ret;
     }

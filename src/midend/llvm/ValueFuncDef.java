@@ -1,5 +1,9 @@
 package midend.llvm;
 
+import backend.Mips;
+import backend.MipsBlock;
+import backend.MipsFuncDef;
+import midend.mips.StackTable;
 import utils.Writer;
 
 import java.util.ArrayList;
@@ -59,6 +63,19 @@ public class ValueFuncDef extends User{
         if(!flag){
             block.addInstruction(new InsRet(VarType.VOID,""));
         }
+    }
+
+    @Override
+    public int RMIPS(Mips mips) {
+        int ret = 0;
+        StackTable stackTable = new StackTable();
+
+        for(BasicBlock basicBlock:basicBlocks){
+            MipsBlock block = new MipsBlock(basicBlock.basicname);
+            ((MipsFuncDef) mips).addMipsBlock(block);
+            ret = basicBlock.RMIPS(block,stackTable);
+        }
+        return ret;
     }
 
     @Override

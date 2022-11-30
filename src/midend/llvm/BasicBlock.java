@@ -1,5 +1,8 @@
 package midend.llvm;
 
+import backend.Mips;
+import backend.MipsIns;
+import midend.mips.StackTable;
 import utils.Writer;
 
 import java.util.ArrayList;
@@ -67,6 +70,17 @@ public class BasicBlock extends Value{
 
     public String getBasicname() {
         return basicname;
+    }
+
+    @Override
+    public int RMIPS(Mips mips, StackTable table) {
+        int ret = 0;
+
+        for(Instruction instruction:instructions){
+            ret = instruction.RMIPS(mips, table);
+        }
+
+        return ret;
     }
 
     @Override

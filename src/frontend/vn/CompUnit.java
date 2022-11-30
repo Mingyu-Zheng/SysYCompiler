@@ -8,7 +8,7 @@ import frontend.token.Token;
 import frontend.token.TokenType;
 import midend.llvm.Value;
 import midend.llvm.ValueGlobalDef;
-import midend.llvm.ValueMudule;
+import midend.llvm.ValueModule;
 import midend.llvm.VarType;
 
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class CompUnit extends Vn{
         ArrayList<Symbol> symbols = symbolTable.getSymbols();
         for(Symbol symbol:symbols){
             if(symbol.getType().equals(SymbolType.STR)){
-                ((ValueMudule) value).addGlobalDecl(new ValueGlobalDef(symbol.getName(), VarType.STR, symbol.getStrContent()));
+                ((ValueModule) value).addGlobalDecl(new ValueGlobalDef(symbol.getName(), VarType.STR, symbol.getStrContent()));
             }
         }
 

@@ -60,9 +60,9 @@ public class MainFuncDef extends Vn{
     @Override
     public int RLLVM(SymbolTable symbolTable, Value value) {
         SymbolTable newSymbolTable = symbolTable.newSonFuncTable();
-        value = (ValueMudule) value;
+        value = (ValueModule) value;
         ValueFuncDef funcDef = new ValueFuncDef(VarType.INT, vns.get(1).getToken().getValue());
-        ((ValueMudule) value).addFuncDef(funcDef);
+        ((ValueModule) value).addFuncDef(funcDef);
         BasicBlock basicBlock = new BasicBlock();
         funcDef.addBasicBlock(basicBlock);
 

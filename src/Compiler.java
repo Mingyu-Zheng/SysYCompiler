@@ -1,8 +1,9 @@
+import backend.MipsModule;
 import error.Error;
 import frontend.vn.CompUnit;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
-import midend.llvm.ValueMudule;
+import midend.llvm.ValueModule;
 import utils.Reader;
 import utils.Writer;
 
@@ -14,10 +15,11 @@ public class Compiler {
     static CompUnit unit;
     static SymbolTable symbolTableForError;
     static SymbolTable symbolTableForLLVM;
-    static ValueMudule unitLLVM;
+    static ValueModule unitLLVM;
+    static MipsModule unitMIPS;
 
     public static void main(String args[]){
-        Compiler compiler = new Compiler("testfile.txt","llvm_ir.txt");
+        Compiler compiler = new Compiler("testfile.txt","mips.txt");
         Token token = null;
         while((token = Token.getToken(compiler.reader)) != null){
             Token.addToken(token);
@@ -27,9 +29,11 @@ public class Compiler {
         symbolTableForError = new SymbolTable(1);
         unit.RAnalysis(symbolTableForError);
         symbolTableForLLVM = new SymbolTable(1);
-        unitLLVM = new ValueMudule();
+        unitLLVM = new ValueModule();
         unit.RLLVM(symbolTableForLLVM, unitLLVM);
-        compiler.writeLLVM();
+        unitMIPS = new MipsModule();
+        unitLLVM.RMIPS(unitMIPS);
+        compiler.writeMIPS();
     }
 
     Compiler(String fin,String fout){
@@ -37,7 +41,6 @@ public class Compiler {
         this.writer = Writer.getInstance();
         this.reader.readerInit(fin);
         this.writer.writerInit(fout);
-        this.unit = new CompUnit();
     }
 
     void writeTokens(){
@@ -57,6 +60,11 @@ public class Compiler {
 
     void writeLLVM(){
         unitLLVM.writeValue(writer);
+        writer.writeContent();
+    }
+
+    void writeMIPS(){
+        unitMIPS.writeMips(writer);
         writer.writeContent();
     }
 }

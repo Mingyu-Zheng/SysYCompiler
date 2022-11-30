@@ -255,16 +255,16 @@ public class VarDef extends Vn{
             }
         }
 
-        value = (ValueMudule) value;
+        value = (ValueModule) value;
         if(dim == 0){
             constInitValue = valueProcess(dim, symbol, initVal, symbolTable);
             symbolTable.addSymbol2Global(symbol);
-            ((ValueMudule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.INT, constInitValue));
+            ((ValueModule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.INT, constInitValue));
 
         } else {
             array = valueProcess(dim, symbol, initVal, symbolTable, dimarr);
             symbolTable.addSymbol2Global(symbol);
-            ((ValueMudule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.ARRAY, array));
+            ((ValueModule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.ARRAY, array));
         }
         return ret;
     }

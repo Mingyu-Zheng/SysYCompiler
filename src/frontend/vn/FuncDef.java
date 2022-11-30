@@ -127,7 +127,7 @@ public class FuncDef extends Vn{
         symbolTable.addSymbol2Global(symbol);
 
         SymbolTable newSymbolTable = symbolTable.newSonFuncTable();
-        value = (ValueMudule) value;
+        value = (ValueModule) value;
         ValueFuncDef funcDef = null;
         if(symbol.getFuncType().isFuncType(SymbolFuncType.INT)){
             funcDef = new ValueFuncDef(VarType.INT, vns.get(1).getToken().getValue());
@@ -135,7 +135,7 @@ public class FuncDef extends Vn{
             funcDef = new ValueFuncDef(VarType.VOID, vns.get(1).getToken().getValue());
         }
 
-        ((ValueMudule) value).addFuncDef(funcDef);
+        ((ValueModule) value).addFuncDef(funcDef);
 
         BasicBlock basicBlock = new BasicBlock();
         if(this.vns.get(3) instanceof FuncFParams){
