@@ -126,6 +126,21 @@ public class SymbolTable {
         return out;
     }
 
+    public int getRegnum() {
+        return regnum;
+    }
+
+    public void setRegIndexAndIndexWithSon(SymbolTable sontable){
+        int symbolnum = sontable.getSymbolnum();
+        int regnum = sontable.getRegnum();
+        if(this.symbolnum < symbolnum){
+            this.symbolnum = symbolnum;
+        }
+        if(this.regnum < regnum){
+            this.regnum = regnum;
+        }
+    }
+
     public void addSymbol(Symbol symbol){
         symbol.setIndex(symbolnum++);
         this.symbols.add(symbol);

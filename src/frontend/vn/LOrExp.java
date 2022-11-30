@@ -7,7 +7,7 @@ import utils.Writer;
 public class LOrExp extends Vn{
 
     public LOrExp(){
-        super("<frontend.vn.LOrExp>");
+        super("<LOrExp>");
     }
     public int RLOrExp(){
         int ret = 0;

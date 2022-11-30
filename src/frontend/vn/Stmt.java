@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class Stmt extends Vn{
 
     public Stmt(){
-        super("<frontend.vn.Stmt>");
+        super("<Stmt>");
     }
     public int RStmt(){
         int ret = 0;
@@ -442,6 +442,83 @@ public class Stmt extends Vn{
             } else if(vn0.getToken().isType(TokenType.WHILETK)){
                 ret = 0;
             } else if(vn0.getToken().isType(TokenType.IFTK)){
+                Vn vnor = vns.get(2).vns.get(0);
+                BasicBlock blocktrue = new BasicBlock();
+                BasicBlock blockfalse = new BasicBlock();
+                BasicBlock blockfalsetoend = new BasicBlock();
+                BasicBlock blockend = new BasicBlock();
+
+                BasicBlock blockto = blockfalse;
+                if(vns.size() < 6){
+                    blockto = blockend;
+                }
+
+                BasicBlock blockjudge = null;
+                for(Vn vnand:vnor.vns){
+                    BasicBlock blockorend = null;
+                    for(Vn vneq:vnand.vns){
+                        BasicBlock blockeq = new BasicBlock();
+                        ((BasicBlock) value).addNextBlock(blockeq);
+                        if(vneq.vns.size() > 1){
+                            Vn vneq1 = vneq.vns.get(1);
+                            int retleft = vneq.vns.get(0).RLLVM(symbolTable, blockeq);
+                            int retright = ((EqExp) vneq).RLLVM(symbolTable, blockeq, true, 2);
+                            Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retleft));
+                            Operator opr = new Operator(VarType.INT, symbolTable.getRegByIndex(retright));
+                            if(vneq1.getToken().getValue().equals("==")){
+                                blockeq.addInstruction(new BranchBne(opl, opr, blockto));
+                            } else {
+                                blockeq.addInstruction(new BranchBeq(opl, opr, blockto));
+                            }
+                        } else {
+                            Vn vnrel = vneq.vns.get(0);
+                            if(vnrel.vns.size() > 1){
+                                Vn vnrel1 = vnrel.vns.get(1);
+                                int retleft = vneq.vns.get(0).RLLVM(symbolTable, blockeq);
+                                int retright = ((RelExp) vneq).RLLVM(symbolTable, blockeq, true, 2);
+                                Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retleft));
+                                Operator opr = new Operator(VarType.INT, symbolTable.getRegByIndex(retright));
+                                if(vnrel1.getToken().getValue().equals(">")){
+                                    blockeq.addInstruction(new BranchBlez(opl, opr, blockto));
+                                } else if(vnrel1.getToken().getValue().equals("<")) {
+                                    blockeq.addInstruction(new BranchBgez(opl, opr, blockto));
+                                } else if(vnrel1.getToken().getValue().equals(">=")) {
+                                    blockeq.addInstruction(new BranchBltz(opl, opr, blockto));
+                                } else {
+                                    blockeq.addInstruction(new BranchBgtz(opl, opr, blockto));
+                                }
+                            } else {
+
+                            }
+                        }
+                        blockorend = blockeq;
+                    }
+                    blockorend.addInstruction(new Jump(blocktrue));
+                    blockjudge = blockorend;
+                }
+                if(vns.size() > 6){
+                    Vn vn6 = vns.get(6);
+                    if(vn6.vns.get(0) instanceof Block){
+                        SymbolTable newsymboltable = symbolTable.newSonTable();
+                        vn6.RLLVM(newsymboltable, blockfalse);
+                        symbolTable.setRegIndexAndIndexWithSon(newsymboltable);
+                    } else {
+                        vn6.RLLVM(symbolTable, blockfalse);
+                    }
+                    blockjudge.addNextBlock(blockfalse);
+                    blockfalsetoend.addInstruction(new Jump(blockend));
+                    blockfalse.addNextBlock(blockfalsetoend);
+                }
+                Vn vn4 = vns.get(4);
+                if(vn4.vns.get(0) instanceof Block){
+                    SymbolTable newsymboltable = symbolTable.newSonTable();
+                    vn4.RLLVM(newsymboltable, blockfalse);
+                    symbolTable.setRegIndexAndIndexWithSon(newsymboltable);
+                } else {
+                    vn4.RLLVM(symbolTable, blockfalse);
+                }
+                ((BasicBlock) value).addNextBlock(blocktrue);
+                ((BasicBlock) value).addNextBlock(blockend);
                 ret = 0;
             } else if(vn0.getToken().isType(TokenType.BREAKTTK)){
                 ret = 0;

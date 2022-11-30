@@ -8,7 +8,7 @@ public class ValueFuncDef extends User{
     private VarType retType;
     private String symbolName;
     private Argument argument;
-    private ArrayList<BasicBlock> basicBlocks = new ArrayList<>();
+    protected ArrayList<BasicBlock> basicBlocks = new ArrayList<>();
 
     public ValueFuncDef(VarType retType, String symbolName){
         this.retType = retType;
@@ -18,6 +18,11 @@ public class ValueFuncDef extends User{
 
     public String getSymbolName() {
         return symbolName;
+    }
+
+    public String getPurlName() {
+        String str = this.symbolName.substring(1);
+        return str;
     }
 
     public void setSymbolName(String funcName) {
@@ -38,6 +43,7 @@ public class ValueFuncDef extends User{
 
     public void addBasicBlock(BasicBlock basicBlock) {
         this.basicBlocks.add(basicBlock);
+        basicBlock.setFatherFunc(this);
     }
 
     public void checkIsVoidRet(){

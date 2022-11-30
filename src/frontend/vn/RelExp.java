@@ -1,13 +1,15 @@
 package frontend.vn;
 
+import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.Value;
 import utils.Writer;
 
 public class RelExp extends Vn{
 
     public RelExp(){
-        super("<frontend.vn.RelExp>");
+        super("<RelExp>");
     }
     public int RRelExp(){
         int ret = 0;
@@ -28,6 +30,12 @@ public class RelExp extends Vn{
         this.RProcess();
         return ret;
     }
+    public int RLLVM(SymbolTable symbolTable, Value value, boolean isCond, int index) {
+        int ret = 0;
+
+        return ret;
+    }
+
     public int writeVnVt(Writer writer){
         for(int i = 0;i < this.vns.size();i++){
             Vn vn = this.vns.get(i);

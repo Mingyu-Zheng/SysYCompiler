@@ -4,6 +4,7 @@ import frontend.symbol.Symbol;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.Value;
 import utils.Writer;
 
 public class EqExp extends Vn {
@@ -46,6 +47,12 @@ public class EqExp extends Vn {
         int ret = 0;
         Vn vn0 = this.vns.get(0);
         ret = vn0.RAnalysis(symbolTable, symbol);
+        return ret;
+    }
+
+    public int RLLVM(SymbolTable symbolTable, Value value, boolean isCond, int index) {
+        int ret = 0;
+
         return ret;
     }
 }
