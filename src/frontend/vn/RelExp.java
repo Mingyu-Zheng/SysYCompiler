@@ -3,7 +3,7 @@ package frontend.vn;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
-import midend.llvm.Value;
+import midend.llvm.*;
 import utils.Writer;
 
 public class RelExp extends Vn{
@@ -30,10 +30,54 @@ public class RelExp extends Vn{
         this.RProcess();
         return ret;
     }
-    public int RLLVM(SymbolTable symbolTable, Value value, boolean isCond, int index) {
-        int ret = 0;
 
-        return ret;
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        return this.RLLVM(symbolTable,value,true,0);
+    }
+
+    public int RLLVM(SymbolTable symbolTable, Value value, boolean isCond, int index) {
+        int lastindex = -1;
+        int ansindex = 0;
+        Vn op = null;
+        for(int i = index; i < vns.size();i++){
+            Vn vn = vns.get(i);
+            if(!vn.isVt){
+                ansindex = vn.RLLVM(symbolTable,value);
+                if(ansindex != -1){
+                    if(lastindex != -1){
+                        int newindex = symbolTable.newReg();
+                        addInstruction(value,symbolTable,newindex,op,lastindex,ansindex);
+                        lastindex = newindex;
+                    } else {
+                        lastindex = ansindex;
+                    }
+                }
+            } else {
+                op = vn;
+            }
+        }
+        return lastindex;
+    }
+
+    protected void addInstruction(Value value, SymbolTable symbolTable, int result,
+                                  Vn op, int reg1, int reg2){
+        if(!(value instanceof BasicBlock)){
+            return;
+        }
+        value = (BasicBlock) value;
+        Operator op1 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg1));
+        Operator op2 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg2));
+
+        if(op.getToken().getValue().equals("<")){
+            ((BasicBlock) value).addInstruction(new InsSlt(symbolTable.getRegByIndex(result), VarType.INT, op1, op2));
+        } else if(op.getToken().getValue().equals(">")) {
+            ((BasicBlock) value).addInstruction(new InsSlt(symbolTable.getRegByIndex(result), VarType.INT, op2, op1));
+        } else if(op.getToken().getValue().equals("<=")) {
+            ((BasicBlock) value).addInstruction(new InsSle(symbolTable.getRegByIndex(result), VarType.INT, op1, op2));
+        } else {
+            ((BasicBlock) value).addInstruction(new InsSle(symbolTable.getRegByIndex(result), VarType.INT, op2, op1));
+        }
     }
 
     public int writeVnVt(Writer writer){

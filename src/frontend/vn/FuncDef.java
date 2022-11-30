@@ -84,7 +84,7 @@ public class FuncDef extends Vn{
             symbolTable.addSymbol(symbol);
         }
 
-        SymbolTable newSymbolTable = symbolTable.newSonTable();
+        SymbolTable newSymbolTable = symbolTable.newSonFuncTable();
         if(this.vns.get(3) instanceof FuncFParams){
             for(Vn vn:vns.get(3).vns){
                 if(!vn.isVt) {
@@ -126,7 +126,7 @@ public class FuncDef extends Vn{
         symbol.setFuncFParamNum(num);
         symbolTable.addSymbol2Global(symbol);
 
-        SymbolTable newSymbolTable = symbolTable.newSonTable();
+        SymbolTable newSymbolTable = symbolTable.newSonFuncTable();
         value = (ValueMudule) value;
         ValueFuncDef funcDef = null;
         if(symbol.getFuncType().isFuncType(SymbolFuncType.INT)){
@@ -140,10 +140,7 @@ public class FuncDef extends Vn{
         BasicBlock basicBlock = new BasicBlock();
         if(this.vns.get(3) instanceof FuncFParams){
             vns.get(3).RLLVM(newSymbolTable, funcDef.getArgument());
-            newSymbolTable.setFuncRegNum();
             vns.get(3).RLLVM(newSymbolTable, basicBlock);
-        } else {
-            newSymbolTable.setFuncRegNum();
         }
 
         newSymbolTable.addSymbolPara(symbol);

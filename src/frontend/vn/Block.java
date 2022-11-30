@@ -6,6 +6,8 @@ import frontend.symbol.SymbolFuncType;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.BasicBlock;
+import midend.llvm.Value;
 
 public class Block extends Vn{
 
@@ -39,7 +41,7 @@ public class Block extends Vn{
     public int RAnalysis(SymbolTable symbolTable, String key){
         int ret = 0;
         if(TokenType.isType(key, TokenType.WHILETK)){
-            SymbolTable newSymbolTable = symbolTable.newSonTable();
+            SymbolTable newSymbolTable = symbolTable.newSonFuncTable();
             for(Vn vn:vns){
                 if(!vn.isVt){
                     if(vn.RAnalysis(newSymbolTable, key) == -1){
@@ -109,7 +111,7 @@ public class Block extends Vn{
 
     public int RAnalysis(SymbolTable symbolTable){
         int ret = 0;
-        SymbolTable newSymbolTable = symbolTable.newSonTable();
+        SymbolTable newSymbolTable = symbolTable.newSonFuncTable();
         for(Vn vn:vns){
             if(!vn.isVt){
                 if(vn.RAnalysis(newSymbolTable) == -1){
@@ -120,5 +122,16 @@ public class Block extends Vn{
         return ret;
     }
 
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        int ret = 0;
+        for(Vn vn:vns){
+            if(!vn.isVt && !(vn instanceof Btype)){
+                ret = vn.RLLVM(symbolTable, value);
+                value = ((BasicBlock) value).getEndBlock();
+            }
+        }
+        return ret;
+    }
 
 }

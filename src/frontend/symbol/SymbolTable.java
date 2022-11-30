@@ -51,9 +51,7 @@ public class SymbolTable {
         return symbolnum;
     }
 
-    public void setFuncRegNum(){
-        this.regnum++;
-    }
+
 
     public int newReg() {
         regnum++;
@@ -72,6 +70,20 @@ public class SymbolTable {
         return symbolnum++;
     }
 
+    public Symbol getRegByIndexSons(int index){
+        Symbol out = null;
+        out = this.getRegbyIndexThis(index);
+        if(out == null){
+            for(SymbolTable sontable:sonTables){
+                out = sontable.getRegByIndexSons(index);
+                if(out != null){
+                    break;
+                }
+            }
+        }
+        return out;
+    }
+
     public String getRegByIndex(int index){
         Symbol out = null;
         SymbolTable table = this;
@@ -81,6 +93,14 @@ public class SymbolTable {
                 break;
             }
             table = table.parentTable;
+        }
+        if(out == null){
+            for(SymbolTable sontable:sonTables){
+                out = sontable.getRegByIndexSons(index);
+                if(out != null){
+                    break;
+                }
+            }
         }
         if(out == null){
             return "";
@@ -186,8 +206,15 @@ public class SymbolTable {
         st.addSymbol(symbol);
     }
 
-    public SymbolTable newSonTable(){
+    public SymbolTable newSonFuncTable(){
         SymbolTable table = new SymbolTable(this);
+        this.sonTables.add(table);
+        return table;
+    }
+
+    public SymbolTable newSonBlockTable(){
+        SymbolTable table = new SymbolTable(this);
+        table.regnum = this.regnum;
         this.sonTables.add(table);
         return table;
     }

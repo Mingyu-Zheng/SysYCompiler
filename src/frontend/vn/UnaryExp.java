@@ -176,8 +176,10 @@ public class UnaryExp extends Vn{
                 addUnaryIns(value,symbolTable,newindex,vn0,lastindex);
                 return newindex;
             } else {
-
-                return 0;
+                int lastindex = vns.get(1).RLLVM(symbolTable, value);
+                int newindex = symbolTable.newReg();
+                addUnaryIns(value,symbolTable,newindex,vn0,lastindex);
+                return newindex;
             }
         } else {
             String name = vn0.getToken().getValue();
@@ -222,13 +224,13 @@ public class UnaryExp extends Vn{
             return;
         }
         value = (BasicBlock) value;
-        Operator op1 = new Operator(VarType.INT , 0);
-        Operator op2 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg));
+        Operator op1 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg));
+        Operator op2 = new Operator(VarType.INT , 0);
 
         if(op.getToken().getValue().equals("-")){
-            ((BasicBlock) value).addInstruction(new InsSub(symbolTable.getRegByIndex(result), VarType.INT, op1, op2));
+            ((BasicBlock) value).addInstruction(new InsSub(symbolTable.getRegByIndex(result), VarType.INT, op2, op1));
         } else {
-            ((BasicBlock) value).addInstruction(new InsSub(symbolTable.getRegByIndex(result), VarType.INT, op1, op2));
+            ((BasicBlock) value).addInstruction(new InsSeq(symbolTable.getRegByIndex(result), VarType.INT, op1, op2));
         }
     }
 

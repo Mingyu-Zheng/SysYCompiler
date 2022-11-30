@@ -3,6 +3,8 @@ package frontend.vn;
 import frontend.symbol.SymbolTable;
 import frontend.token.Token;
 import frontend.token.TokenType;
+import midend.llvm.BasicBlock;
+import midend.llvm.Value;
 import utils.Writer;
 
 public class BlockItem extends Vn{
@@ -52,6 +54,17 @@ public class BlockItem extends Vn{
                         ret = -1;
                     }
                 }
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public int RLLVM(SymbolTable symbolTable, Value value) {
+        int ret = 0;
+        for(Vn vn:vns){
+            if(!vn.isVt && !(vn instanceof Btype)){
+                ret = vn.RLLVM(symbolTable, value);
             }
         }
         return ret;

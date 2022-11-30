@@ -42,7 +42,7 @@ public class MainFuncDef extends Vn{
 
     public int RAnalysis(SymbolTable symbolTable){
         int ret = 0;
-        SymbolTable newSymbolTable = symbolTable.newSonTable();
+        SymbolTable newSymbolTable = symbolTable.newSonFuncTable();
         for(Vn vn:vns){
             if(vn instanceof Block){
                 if(vn.RAnalysis(newSymbolTable, SymbolFuncType.INT.getName())==-1){
@@ -59,14 +59,14 @@ public class MainFuncDef extends Vn{
 
     @Override
     public int RLLVM(SymbolTable symbolTable, Value value) {
-        SymbolTable newSymbolTable = symbolTable.newSonTable();
+        SymbolTable newSymbolTable = symbolTable.newSonFuncTable();
         value = (ValueMudule) value;
         ValueFuncDef funcDef = new ValueFuncDef(VarType.INT, vns.get(1).getToken().getValue());
         ((ValueMudule) value).addFuncDef(funcDef);
         BasicBlock basicBlock = new BasicBlock();
         funcDef.addBasicBlock(basicBlock);
 
-        newSymbolTable.setFuncRegNum();
+
 
         Vn vnblock = vns.get(4);
         vnblock.RLLVM(newSymbolTable, basicBlock);
