@@ -2,11 +2,11 @@ package midend.llvm;
 
 import utils.Writer;
 
-public class BranchBgtz extends InsBranch{
-    private String insName = "bgtz";
+public class BranchBgt extends InsBranch{
+    private String insName = "bgt";
     BasicBlock targetBlock = null;
 
-    public BranchBgtz(Operator op1, Operator op2, BasicBlock targetBlock){
+    public BranchBgt(Operator op1, Operator op2, BasicBlock targetBlock){
         super();
         this.op1 = op1;
         this.op2 = op2;

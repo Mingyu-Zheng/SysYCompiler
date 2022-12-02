@@ -47,7 +47,6 @@ public class ValueModule extends Value{
         for(ValueFuncDef funcDef:funcDefs){
             MipsFuncDef func = new MipsFuncDef(funcDef.getSymbolName());
             StackTable stackTable = new StackTable(funcDef);
-            stackTable.addGlobals(this.globalDecls);
             ret = funcDef.RMIPS(func, stackTable);
             ((MipsModule) mips).addFuncDef(func);
         }

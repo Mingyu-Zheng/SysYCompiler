@@ -169,7 +169,7 @@ public class UnaryExp extends Vn{
             return vn0.RLLVM(symbolTable,value);
         } else if(vn0 instanceof UnaryOp) {
             if(vn0.getToken().getValue().equals("+")){
-                return vn0.RLLVM(symbolTable, value);
+                return vns.get(1).RLLVM(symbolTable, value);
             } else if(vn0.getToken().getValue().equals("-")){
                 int lastindex = vns.get(1).RLLVM(symbolTable, value);
                 int newindex = symbolTable.newReg();

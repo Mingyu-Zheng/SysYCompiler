@@ -446,7 +446,7 @@ public class Stmt extends Vn{
                 BasicBlock blocktrue = new BasicBlock(fatherFunc);
                 BasicBlock blockend = new BasicBlock(fatherFunc);
                 BasicBlock blockoutloop = new BasicBlock(fatherFunc);
-                blocktrue.setContinueBlock(blockend);
+                blocktrue.setContinueBlock(blockloop);
                 blocktrue.setBreakBlock(blockoutloop);
                 blockend.addInstruction(new Jump(blockloop));
                 BasicBlock blockto = blockoutloop;
@@ -454,17 +454,36 @@ public class Stmt extends Vn{
                 ((BasicBlock) value).addNextBlock(blockloop);
 
                 BasicBlock blockjudge = null;
-
+                ArrayList<BasicBlock> orblocks = new ArrayList<>();
+                for(Vn vneq:vnor.vns){
+                    if(vneq.isVt){
+                        continue;
+                    }
+                    orblocks.add(new BasicBlock());
+                }
+                int orcount = 0;
                 for(Vn vnand:vnor.vns){
                     if(vnand.isVt){
                         continue;
                     }
                     BasicBlock blockorend = null;
+                    BasicBlock blocktarget = blockto;
+                    if(orcount < orblocks.size() - 1){
+                        blocktarget = orblocks.get(orcount + 1);
+                    }
+                    orcount++;
+                    int andcount = 0;
                     for(Vn vneq:vnand.vns){
                         if(vneq.isVt){
                             continue;
                         }
-                        BasicBlock blockeq = new BasicBlock();
+                        BasicBlock blockeq = null;
+                        if(andcount == 0){
+                            blockeq = orblocks.get(orcount - 1);
+                        } else {
+                            blockeq = new BasicBlock();
+                        }
+                        andcount++;
                         blockloop.addNextBlock(blockeq);
                         if(vneq.vns.size() > 1){
                             Vn vneq1 = vneq.vns.get(1);
@@ -473,9 +492,9 @@ public class Stmt extends Vn{
                             Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retleft));
                             Operator opr = new Operator(VarType.INT, symbolTable.getRegByIndex(retright));
                             if(vneq1.getToken().getValue().equals("==")){
-                                blockeq.addInstruction(new BranchBne(opl, opr, blockto));
+                                blockeq.addInstruction(new BranchBne(opl, opr, blocktarget));
                             } else {
-                                blockeq.addInstruction(new BranchBeq(opl, opr, blockto));
+                                blockeq.addInstruction(new BranchBeq(opl, opr, blocktarget));
                             }
                         } else {
                             Vn vnrel = vneq.vns.get(0);
@@ -486,25 +505,29 @@ public class Stmt extends Vn{
                                 Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retleft));
                                 Operator opr = new Operator(VarType.INT, symbolTable.getRegByIndex(retright));
                                 if(vnrel1.getToken().getValue().equals(">")){
-                                    blockeq.addInstruction(new BranchBlez(opl, opr, blockto));
+                                    blockeq.addInstruction(new BranchBle(opl, opr, blocktarget));
                                 } else if(vnrel1.getToken().getValue().equals("<")) {
-                                    blockeq.addInstruction(new BranchBgez(opl, opr, blockto));
+                                    blockeq.addInstruction(new BranchBge(opl, opr, blocktarget));
                                 } else if(vnrel1.getToken().getValue().equals(">=")) {
-                                    blockeq.addInstruction(new BranchBltz(opl, opr, blockto));
+                                    blockeq.addInstruction(new BranchBlt(opl, opr, blocktarget));
                                 } else {
-                                    blockeq.addInstruction(new BranchBgtz(opl, opr, blockto));
+                                    blockeq.addInstruction(new BranchBgt(opl, opr, blocktarget));
                                 }
                             } else {
                                 int retindex = vnrel.vns.get(0).RLLVM(symbolTable, blockeq);
                                 Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retindex));
                                 Operator opr = new Operator(VarType.INT, 0);
-                                blockeq.addInstruction(new BranchBeq(opl, opr, blockto));
+                                blockeq.addInstruction(new BranchBeq(opl, opr, blocktarget));
                             }
                         }
                         blockorend = blockeq;
                     }
+                    if(orcount < orblocks.size()){
+                        blockorend.addInstruction(new Jump(blocktrue));
+                    }
                     blockjudge = blockorend;
                 }
+                blockloop.addNextBlock(blocktrue);
                 Vn vn4 = vns.get(4);
                 if(vn4.vns.get(0) instanceof Block){
                     SymbolTable newsymboltable = symbolTable.newSonBlockTable();
@@ -513,7 +536,6 @@ public class Stmt extends Vn{
                 } else {
                     vn4.RLLVM(symbolTable, blocktrue);
                 }
-                blockloop.addNextBlock(blocktrue);
                 blockloop.addNextBlock(blockend);
                 blockloop.addNextBlock(blockoutloop);
                 ret = 0;
@@ -524,8 +546,6 @@ public class Stmt extends Vn{
                 BasicBlock blockfalse = new BasicBlock(fatherFunc);
                 // BasicBlock blockfalsetoend = new BasicBlock(fatherFunc);
                 BasicBlock blockend = new BasicBlock(fatherFunc);
-                blocktrue.setContinueBlock(blockend);
-                blockfalse.setContinueBlock(blockend);
 
                 boolean isjumptrue = true;
                 BasicBlock blockto = blockfalse;
@@ -535,16 +555,36 @@ public class Stmt extends Vn{
                 }
 
                 BasicBlock blockjudge = null;
+                ArrayList<BasicBlock> orblocks = new ArrayList<>();
+                for(Vn vneq:vnor.vns){
+                    if(vneq.isVt){
+                        continue;
+                    }
+                    orblocks.add(new BasicBlock());
+                }
+                int orcount = 0;
                 for(Vn vnand:vnor.vns){
                     if(vnand.isVt){
                         continue;
                     }
                     BasicBlock blockorend = null;
+                    BasicBlock blocktarget = blockto;
+                    if(orcount < orblocks.size() - 1){
+                        blocktarget = orblocks.get(orcount + 1);
+                    }
+                    orcount++;
+                    int andcount = 0;
                     for(Vn vneq:vnand.vns){
                         if(vneq.isVt){
                             continue;
                         }
-                        BasicBlock blockeq = new BasicBlock();
+                        BasicBlock blockeq = null;
+                        if(andcount == 0){
+                            blockeq = orblocks.get(orcount - 1);
+                        } else {
+                            blockeq = new BasicBlock();
+                        }
+                        andcount++;
                         ((BasicBlock) value).addNextBlock(blockeq);
                         if(vneq.vns.size() > 1){
                             Vn vneq1 = vneq.vns.get(1);
@@ -553,9 +593,9 @@ public class Stmt extends Vn{
                             Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retleft));
                             Operator opr = new Operator(VarType.INT, symbolTable.getRegByIndex(retright));
                             if(vneq1.getToken().getValue().equals("==")){
-                                blockeq.addInstruction(new BranchBne(opl, opr, blockto));
+                                blockeq.addInstruction(new BranchBne(opl, opr, blocktarget));
                             } else {
-                                blockeq.addInstruction(new BranchBeq(opl, opr, blockto));
+                                blockeq.addInstruction(new BranchBeq(opl, opr, blocktarget));
                             }
                         } else {
                             Vn vnrel = vneq.vns.get(0);
@@ -566,24 +606,26 @@ public class Stmt extends Vn{
                                 Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retleft));
                                 Operator opr = new Operator(VarType.INT, symbolTable.getRegByIndex(retright));
                                 if(vnrel1.getToken().getValue().equals(">")){
-                                    blockeq.addInstruction(new BranchBlez(opl, opr, blockto));
+                                    blockeq.addInstruction(new BranchBle(opl, opr, blocktarget));
                                 } else if(vnrel1.getToken().getValue().equals("<")) {
-                                    blockeq.addInstruction(new BranchBgez(opl, opr, blockto));
+                                    blockeq.addInstruction(new BranchBge(opl, opr, blocktarget));
                                 } else if(vnrel1.getToken().getValue().equals(">=")) {
-                                    blockeq.addInstruction(new BranchBltz(opl, opr, blockto));
+                                    blockeq.addInstruction(new BranchBlt(opl, opr, blocktarget));
                                 } else {
-                                    blockeq.addInstruction(new BranchBgtz(opl, opr, blockto));
+                                    blockeq.addInstruction(new BranchBgt(opl, opr, blocktarget));
                                 }
                             } else {
                                 int retindex = vnrel.vns.get(0).RLLVM(symbolTable, blockeq);
                                 Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retindex));
-                                Operator opr = new Operator(VarType.INT, 0);
-                                blockeq.addInstruction(new BranchBeq(opl, opr, blockto));
+                                Operator opr = new Operator(VarType.INT, "0");
+                                blockeq.addInstruction(new BranchBeq(opl, opr, blocktarget));
                             }
                         }
                         blockorend = blockeq;
                     }
-                    if(isjumptrue){
+                    if(orcount < orblocks.size()){
+                        blockorend.addInstruction(new Jump(blocktrue));
+                    } else if(isjumptrue){
                         blockorend.addInstruction(new Jump(blocktrue));
                     }
                     blockjudge = blockorend;
@@ -602,6 +644,7 @@ public class Stmt extends Vn{
                     blockfalse.addInstruction(new Jump(blockend));
                 }
                 Vn vn4 = vns.get(4);
+                ((BasicBlock) value).addNextBlock(blocktrue);
                 if(vn4.vns.get(0) instanceof Block){
                     SymbolTable newsymboltable = symbolTable.newSonBlockTable();
                     vn4.RLLVM(newsymboltable, blocktrue);
@@ -609,7 +652,6 @@ public class Stmt extends Vn{
                 } else {
                     vn4.RLLVM(symbolTable, blocktrue);
                 }
-                ((BasicBlock) value).addNextBlock(blocktrue);
                 ((BasicBlock) value).addNextBlock(blockend);
                 ret = 0;
             } else if(vn0.getToken().isType(TokenType.BREAKTTK)){
@@ -687,7 +729,7 @@ public class Stmt extends Vn{
                 i = i + 2;
                 j = i;
             } else if(i + 1 == str.length() - 1){
-                if(j < i){
+                if(j <= i){
                     String strContent = "\"" + str.substring(j, i + 1) + "\"";
                     int strNum = symbolTable.getStrnum();
                     String symname = "0s" + strNum;

@@ -48,6 +48,10 @@ public class Instruction extends User{
         return this.i16;
     }
 
+    public VarType getVarType() {
+        return varType;
+    }
+
     public String getResult() {
         return this.result;
     }

@@ -110,16 +110,14 @@ public class LVal extends Vn{
                 return -1;
             }
             retindex = symbol.getIndex();
-            if(symbol.isArray()){
-                if(symbol.isGlobal()){
-                    Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
-                    retindex = symbolTable.newMemReg();
-                    ((BasicBlock) value).addInstruction(new InsLa(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER,operator));
-                } else if(symbol.isPara()){
-                    Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
-                    retindex = symbolTable.newMemReg();
-                    ((BasicBlock) value).addInstruction(new InsLoad(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER, operator));
-                }
+            if(symbol.isGlobal()){
+                Operator operator = new Operator(VarType.ADDRESS, symbolTable.getRegByIndex(retindex));
+                retindex = symbolTable.newMemReg();
+                ((BasicBlock) value).addInstruction(new InsLa(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER,operator));
+            } else if(symbol.isPara() && symbol.isArray()){
+                Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
+                retindex = symbolTable.newMemReg();
+                ((BasicBlock) value).addInstruction(new InsLoad(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER, operator));
             }
         } else if(vns.size() <= 4){
             ArrayList<Integer> dimarr = symbol.getDimarray();
@@ -128,7 +126,7 @@ public class LVal extends Vn{
             int retadd = -1;
             int retans = -1;
             if(symbol.isGlobal()){
-                Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
+                Operator operator = new Operator(VarType.ADDRESS, symbolTable.getRegByIndex(retindex));
                 retindex = symbolTable.newReg();
                 ((BasicBlock) value).addInstruction(new InsLa(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER,operator));
             } else if(symbol.isPara()){

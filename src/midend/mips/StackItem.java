@@ -7,8 +7,8 @@ public class StackItem {
 
     protected boolean isReg = false;
     private Reg reg = null;
+    protected boolean isStack = false;
     protected boolean isPointer = false;
-    protected boolean isGlobal = false;
 
     private int offset = 0;
     private int size = 0;
@@ -26,20 +26,20 @@ public class StackItem {
         this.isReg = false;
     }
 
-    public boolean isGlobal() {
-        return isGlobal;
-    }
-
-    public void setGlobal(boolean global) {
-        isGlobal = global;
-    }
-
     public boolean isPointer() {
         return isPointer;
     }
 
     public void setPointer(boolean pointer) {
         isPointer = pointer;
+    }
+
+    public boolean isStack() {
+        return isStack;
+    }
+
+    public void setStack(boolean stack) {
+        isStack = stack;
     }
 
     public String getResult() {

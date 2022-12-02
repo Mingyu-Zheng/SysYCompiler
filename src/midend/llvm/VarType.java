@@ -9,6 +9,7 @@ public enum VarType{
     INT_POINTER("i32*"),
     STR("str"),
     ARRAY("array"),
+    ADDRESS("address")
     ;
     private String typeName;
 

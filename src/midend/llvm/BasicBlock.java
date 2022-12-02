@@ -64,8 +64,12 @@ public class BasicBlock extends Value{
 
     public void addNextBlock(BasicBlock block){
         this.fatherFunc.addBasicBlock(block);
-        block.setBreakBlock(this.breakBlock);
-        block.setContinueBlock(this.continueBlock);
+        if(block.breakBlock == null){
+            block.setBreakBlock(this.breakBlock);
+        }
+        if(block.continueBlock == null){
+            block.setContinueBlock(this.continueBlock);
+        }
     }
 
     public void addInstruction(Instruction instruction){

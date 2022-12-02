@@ -38,8 +38,16 @@ public class Imm extends MipsIns{
                 ismem = true;
             }
         }
+        boolean isbranch = false;
+        for(int i = 0; i < branches.length;i++){
+            if(name.equals(branches[i])){
+                isbranch = true;
+            }
+        }
         if(ismem){
             line += this.rt.toString() + ", " + this.label + "(" + this.rs.toString() + ")" + "\n";
+        } else if(isbranch) {
+            line += this.rs.toString() + ", " + this.rt.toString() + ", " + this.label + "\n";
         } else {
             line += this.rt.toString() + ", " + this.rs.toString() + ", " + this.label + "\n";
         }
