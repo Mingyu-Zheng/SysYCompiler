@@ -85,9 +85,8 @@ public class PrimaryExp extends Vn{
             int newindex = symbolTable.newReg();
             int number = ((Number) vn0).getInt();
             value = (BasicBlock) value;
-            Operator op1 = new Operator(VarType.INT,number);
-            Operator op2 = new Operator(VarType.INT, 0);
-            ((BasicBlock) value).addInstruction(new InsAdd(symbolTable.getRegByIndex(newindex),VarType.INT,op1,op2));
+            Operator op1 = new Operator(VarType.INT, number);
+            ((BasicBlock) value).addInstruction(new InsLi(symbolTable.getRegByIndex(newindex),VarType.INT,op1));
             return newindex;
         } else {
             retindex = vns.get(1).RLLVM(symbolTable,value);

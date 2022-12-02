@@ -399,32 +399,7 @@ INTCON 3
 RBRACK ]
 ASSIGN =
 LBRACE {
-IDENFR s1_1
-LBRACK [
 INTCON 0
-<Number>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-<AddExp>
-<Exp>
-RBRACK ]
-LBRACK [
-INTCON 0
-<Number>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-<AddExp>
-<Exp>
-RBRACK ]
-<LVal>
-<PrimaryExp>
-<UnaryExp>
-<MulExp>
-<AddExp>
-MINU -
-INTCON 100
 <Number>
 <PrimaryExp>
 <UnaryExp>

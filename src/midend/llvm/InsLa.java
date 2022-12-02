@@ -11,6 +11,10 @@ public class InsLa extends Instruction{
         this.op1 = op1;
     }
 
+    public String getInsName() {
+        return insName;
+    }
+
     @Override
     public int writeValue(Writer writer) {
         String line = "    " + this.result + " = " + this.insName + " ";

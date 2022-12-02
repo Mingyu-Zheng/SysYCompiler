@@ -10,7 +10,7 @@ import utils.Writer;
 public class EqExp extends Vn {
 
     public EqExp(){
-        super("<frontend.vn.EqExp>");
+        super("<EqExp>");
     }
     public int REqExp(){
         int ret = 0;

@@ -1,5 +1,7 @@
 package backend;
 
+import java.util.ArrayList;
+
 public class Reg {
     public static final Reg ZERO = new Reg("0",0);
     public static final Reg AT = new Reg("at",1);
@@ -7,7 +9,7 @@ public class Reg {
 
     public static final Reg RA = new Reg("ra",3);
     public static final Reg SP = new Reg("sp",4);
-    public static final Reg AR = new Reg("a0",5);
+    public static final Reg A0 = new Reg("a0",5);
 
     public static final Reg T0 = new Reg("t0",6);
     public static final Reg T1 = new Reg("t1",7);
@@ -47,5 +49,33 @@ public class Reg {
     @Override
     public String toString() {
         return "$" + name;
+    }
+
+    public static void addListAllReg(ArrayList<Reg> regs){
+        regs.add(Reg.T0);
+        regs.add(Reg.T1);
+        regs.add(Reg.T2);
+        regs.add(Reg.T3);
+        regs.add(Reg.T4);
+        regs.add(Reg.T5);
+        regs.add(Reg.T6);
+        regs.add(Reg.T7);
+        regs.add(Reg.T8);
+        regs.add(Reg.T9);
+        regs.add(Reg.S0);
+        regs.add(Reg.S1);
+        regs.add(Reg.S2);
+        regs.add(Reg.S3);
+        regs.add(Reg.S4);
+        regs.add(Reg.S5);
+        regs.add(Reg.S6);
+        regs.add(Reg.S7);
+        regs.add(Reg.S8);
+        regs.add(Reg.S9);
+        regs.add(Reg.S10);
+        regs.add(Reg.S11);
+        regs.add(Reg.S12);
+        regs.add(Reg.S13);
+        regs.add(Reg.S14);
     }
 }

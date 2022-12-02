@@ -32,6 +32,17 @@ public class InsCall extends Instruction{
         }
     }
 
+    public ArrayList<Operator> getOperators() {
+        return operators;
+    }
+
+    public boolean isVoid(){
+        if(this.varType.equals(VarType.VOID)){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     @Override
     public int writeValue(Writer writer) {

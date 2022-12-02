@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class ConstDef extends Vn{
 
     public ConstDef(){
-        super("<frontend.vn.ConstDef>");
+        super("<ConstDef>");
     }
     public int RConstDef(){
         int ret = 0;
@@ -217,9 +217,12 @@ public class ConstDef extends Vn{
             constInitValue = valueProcess(dim, symbol, constInitVal, symbolTable);
             symbolTable.addSymbolMem2Reg(symbol);
             ret = symbol.getIndex();
-            int number = constInitValue;
             ((BasicBlock) value).addInstruction(new InsAlloc(symbolTable.getRegByIndex(ret),VarType.INT));
-            Operator op1 = new Operator(VarType.INT,number);
+            int number = constInitValue;
+            int rettmp = symbolTable.newReg();
+            Operator operator = new Operator(VarType.INT, number);
+            ((BasicBlock) value).addInstruction(new InsLi(symbolTable.getRegByIndex(rettmp),VarType.INT,operator));
+            Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(rettmp));
             Operator op2 = new Operator(VarType.INT_POINTER,symbolTable.getRegByIndex(ret));
             ((BasicBlock) value).addInstruction(new InsStore(VarType.INT,op1,op2));
         } else {
@@ -233,7 +236,10 @@ public class ConstDef extends Vn{
             ((BasicBlock) value).addInstruction(new InsAlloc(symbolTable.getRegByIndex(ret),VarType.INT, memSize));
             for(int i = 0;i < array.length;i++){
                 int number = array[i];
-                Operator op1 = new Operator(VarType.INT,number);
+                int rettmp = symbolTable.newReg();
+                Operator operator = new Operator(VarType.INT, number);
+                ((BasicBlock) value).addInstruction(new InsLi(symbolTable.getRegByIndex(rettmp), VarType.INT, operator));
+                Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(rettmp));
                 Operator op2 = new Operator(VarType.INT_POINTER,symbolTable.getRegByIndex(ret));
                 ((BasicBlock) value).addInstruction(new InsStore(VarType.INT,op1,op2,4 * i));
             }

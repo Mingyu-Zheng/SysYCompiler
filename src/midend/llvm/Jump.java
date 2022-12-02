@@ -11,6 +11,14 @@ public class Jump extends Instruction{
         this.targetBlock = targetBlock;
     }
 
+    public String getLabel(){
+        return this.targetBlock.getBasicname();
+    }
+
+    public String getInsName() {
+        return insName;
+    }
+
     @Override
     public int writeValue(Writer writer) {
         String line = "    " + this.insName + " ";

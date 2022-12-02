@@ -9,7 +9,7 @@ import frontend.token.TokenType;
 public class Number extends Vn{
 
     public Number(){
-        super("<frontend.vn.Number>");
+        super("<Number>");
     }
     public int RNumber(){
         int ret = 0;
@@ -17,7 +17,7 @@ public class Number extends Vn{
         if(token.isType(TokenType.INTCON)){
             this.addToken(token);
         } else {
-            Error.error("<frontend.vn.Number>");
+            Error.error("<Number>");
             ret = -1;
         }
         return ret;

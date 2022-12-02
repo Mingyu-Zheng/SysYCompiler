@@ -3,6 +3,7 @@ package midend.llvm;
 import backend.Mips;
 import backend.MipsBlock;
 import backend.MipsFuncDef;
+import backend.MipsGlobalDef;
 import midend.mips.StackTable;
 import utils.Writer;
 
@@ -27,6 +28,10 @@ public class ValueFuncDef extends User{
     public String getPurlName() {
         String str = this.symbolName.substring(1);
         return str;
+    }
+
+    public ArrayList<BasicBlock> getBasicBlocks() {
+        return basicBlocks;
     }
 
     public void setSymbolName(String funcName) {
@@ -65,16 +70,10 @@ public class ValueFuncDef extends User{
         }
     }
 
-    @Override
-    public int RMIPS(Mips mips) {
-        int ret = 0;
-        StackTable stackTable = new StackTable();
 
-        for(BasicBlock basicBlock:basicBlocks){
-            MipsBlock block = new MipsBlock(basicBlock.basicname);
-            ((MipsFuncDef) mips).addMipsBlock(block);
-            ret = basicBlock.RMIPS(block,stackTable);
-        }
+    public int RMIPS(Mips mips, StackTable stackTable) {
+        int ret = 0;
+        ret = stackTable.RMIPS(mips);
         return ret;
     }
 

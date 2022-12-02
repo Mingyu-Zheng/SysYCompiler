@@ -2,7 +2,7 @@ package midend.llvm;
 
 import utils.Writer;
 
-public class BranchBeq extends Instruction{
+public class BranchBeq extends InsBranch{
     private String insName = "beq";
     BasicBlock targetBlock = null;
 
@@ -13,6 +13,10 @@ public class BranchBeq extends Instruction{
         this.targetBlock = targetBlock;
     }
 
+    public String getLabel(){
+        return this.targetBlock.getBasicname();
+    }
+
     @Override
     public int writeValue(Writer writer) {
         String line = "    " + this.insName + " ";
@@ -21,5 +25,7 @@ public class BranchBeq extends Instruction{
         return 0;
     }
 
-
+    public String getInsName() {
+        return insName;
+    }
 }

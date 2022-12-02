@@ -40,7 +40,7 @@ public class LVal extends Vn{
             }
             Token.retractToken();
         } else {
-            Error.error("<frontend.vn.LVal>");
+            Error.error("<LVal>");
             ret = -1;
         }
         return ret;
@@ -115,6 +115,10 @@ public class LVal extends Vn{
                     Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
                     retindex = symbolTable.newMemReg();
                     ((BasicBlock) value).addInstruction(new InsLa(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER,operator));
+                } else if(symbol.isPara()){
+                    Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
+                    retindex = symbolTable.newMemReg();
+                    ((BasicBlock) value).addInstruction(new InsLoad(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER, operator));
                 }
             }
         } else if(vns.size() <= 4){
@@ -127,6 +131,10 @@ public class LVal extends Vn{
                 Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
                 retindex = symbolTable.newReg();
                 ((BasicBlock) value).addInstruction(new InsLa(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER,operator));
+            } else if(symbol.isPara()){
+                Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
+                retindex = symbolTable.newMemReg();
+                ((BasicBlock) value).addInstruction(new InsLoad(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER, operator));
             }
             int rettmp = -1;
             for(Vn vn:vns){
@@ -164,6 +172,10 @@ public class LVal extends Vn{
                 Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
                 retindex = symbolTable.newReg();
                 ((BasicBlock) value).addInstruction(new InsLa(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER,operator));
+            } else if(symbol.isPara()){
+                Operator operator = new Operator(VarType.ARRAY, symbolTable.getRegByIndex(retindex));
+                retindex = symbolTable.newMemReg();
+                ((BasicBlock) value).addInstruction(new InsLoad(symbolTable.getRegByIndex(retindex), VarType.INT_POINTER, operator));
             }
             ArrayList<Integer> retarr = new ArrayList<>();
             for(Vn vn:vns){

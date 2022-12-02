@@ -644,7 +644,7 @@ public class Stmt extends Vn{
                     int newindex = symbolTable.newReg();
                     value = (BasicBlock) value;
                     ((BasicBlock) value).addInstruction(new InsCall(symbolTable.getRegByIndex(newindex),
-                            VarType.INT, vn2.getToken().getValue()));
+                            VarType.INT, "0getint"));
                     Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(newindex));
                     Operator op2 = new Operator(VarType.INT_POINTER, symbolTable.getRegByIndex(ret));
                     ((BasicBlock) value).addInstruction(new InsStore(VarType.INT, op1, op2));

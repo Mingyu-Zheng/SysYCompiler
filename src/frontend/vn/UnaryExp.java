@@ -225,7 +225,7 @@ public class UnaryExp extends Vn{
         }
         value = (BasicBlock) value;
         Operator op1 = new Operator(VarType.INT , symbolTable.getRegByIndex(reg));
-        Operator op2 = new Operator(VarType.INT , 0);
+        Operator op2 = new Operator(VarType.INT , "0");
 
         if(op.getToken().getValue().equals("-")){
             ((BasicBlock) value).addInstruction(new InsSub(symbolTable.getRegByIndex(result), VarType.INT, op2, op1));

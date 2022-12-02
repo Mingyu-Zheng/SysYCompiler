@@ -26,7 +26,10 @@ public class MipsBlock extends Mips{
 
     @Override
     public int writeMips(Writer writer) {
-        String line = "\n" + this.name + ":\n";
+        String line = "\n";
+        if(!this.name.isEmpty()){
+            line += this.name + ":\n";
+        }
         writer.addStr(line);
         for(MipsIns ins:mipsInses){
             ins.writeMips(writer);

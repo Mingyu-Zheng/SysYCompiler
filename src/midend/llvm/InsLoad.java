@@ -19,6 +19,10 @@ public class InsLoad extends Instruction{
         this.i16 = i16;
     }
 
+    public String getInsName() {
+        return insName;
+    }
+
     @Override
     public int writeValue(Writer writer) {
         String line = "    " + this.result + " = " + this.insName + " ";

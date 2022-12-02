@@ -22,6 +22,13 @@ public class Imm extends MipsIns{
         }
     }
 
+    public Imm(String name, Reg rs, Reg rt, int offset){
+        this.name = name;
+        this.rs = rs;
+        this.rt = rt;
+        this.label = String.valueOf(offset);
+    }
+
     @Override
     public int writeMips(Writer writer) {
         String line = "    " + this.name + " ";
@@ -34,7 +41,7 @@ public class Imm extends MipsIns{
         if(ismem){
             line += this.rt.toString() + ", " + this.label + "(" + this.rs.toString() + ")" + "\n";
         } else {
-            line += this.rs.toString() + ", " + this.rt.toString() + ", " + this.label + "\n";
+            line += this.rt.toString() + ", " + this.rs.toString() + ", " + this.label + "\n";
         }
         writer.addStr(line);
         return 0;

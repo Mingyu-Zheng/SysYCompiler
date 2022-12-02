@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class VarDef extends Vn{
 
     public VarDef(){
-        super("<frontend.vn.VarDef>");
+        super("<VarDef>");
     }
     public int RVarDef(){
         int ret = 0;

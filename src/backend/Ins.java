@@ -17,8 +17,8 @@ public class Ins extends MipsIns{
 
     @Override
     public int writeMips(Writer writer) {
-        String line = "    " + this.name + " " + this.rs.toString() + ", " + this.rt.toString() + ", ";
-        line += this.rd.toString() + "\n";
+        String line = "    " + this.name + " " + this.rd.toString() + ", " + this.rs.toString() + ", ";
+        line += this.rt.toString() + "\n";
         writer.addStr(line);
         return 0;
     }

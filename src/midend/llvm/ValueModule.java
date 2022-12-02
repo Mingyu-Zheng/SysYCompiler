@@ -4,6 +4,8 @@ import backend.Mips;
 import backend.MipsFuncDef;
 import backend.MipsGlobalDef;
 import backend.MipsModule;
+import midend.mips.StackItem;
+import midend.mips.StackTable;
 import utils.Writer;
 
 import java.util.ArrayList;
@@ -44,7 +46,10 @@ public class ValueModule extends Value{
         }
         for(ValueFuncDef funcDef:funcDefs){
             MipsFuncDef func = new MipsFuncDef(funcDef.getSymbolName());
-            ret = funcDef.RMIPS(func);
+            StackTable stackTable = new StackTable(funcDef);
+            stackTable.addGlobals(this.globalDecls);
+            ret = funcDef.RMIPS(func, stackTable);
+            ((MipsModule) mips).addFuncDef(func);
         }
         return ret;
     }

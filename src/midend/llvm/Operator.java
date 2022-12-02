@@ -2,7 +2,7 @@ package midend.llvm;
 
 public class Operator extends User{
     private VarType varType;
-    private String varName;
+    private String varName = "";
     private int varValue = 0;
 
     boolean isConst = false;

@@ -28,6 +28,30 @@ public class Instruction extends User{
         return insName;
     }
 
+    public String getOp1Name() {
+        return op1.getVarName();
+    }
+
+    public Operator getOp1(){
+        return this.op1;
+    }
+
+    public Operator getOp2(){
+        return this.op2;
+    }
+
+    public String getOp2Name() {
+        return op2.getVarName();
+    }
+
+    public int getI16(){
+        return this.i16;
+    }
+
+    public String getResult() {
+        return this.result;
+    }
+
     @Override
     public int writeValue(Writer writer) {
         if(op1 == null || op2 == null){

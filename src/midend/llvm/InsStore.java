@@ -19,6 +19,10 @@ public class InsStore extends Instruction{
         this.i16 = i16;
     }
 
+    public String getInsName() {
+        return insName;
+    }
+
     @Override
     public int writeValue(Writer writer) {
         if(op1 == null || op2 == null){

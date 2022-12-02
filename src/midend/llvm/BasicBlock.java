@@ -27,6 +27,10 @@ public class BasicBlock extends Value{
         return fatherFunc;
     }
 
+    public ArrayList<Instruction> getInstructions() {
+        return instructions;
+    }
+
     public void setFatherFunc(ValueFuncDef fatherFunc) {
         this.fatherFunc = fatherFunc;
         this.basicname = fatherFunc.getPurlName();

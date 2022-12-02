@@ -2,7 +2,7 @@ package midend.llvm;
 
 import utils.Writer;
 
-public class BranchBne extends Instruction{
+public class BranchBne extends InsBranch{
     private String insName = "bne";
     BasicBlock targetBlock = null;
 
@@ -11,6 +11,14 @@ public class BranchBne extends Instruction{
         this.op1 = op1;
         this.op2 = op2;
         this.targetBlock = targetBlock;
+    }
+
+    public String getLabel(){
+        return this.targetBlock.getBasicname();
+    }
+
+    public String getInsName() {
+        return insName;
     }
 
     @Override

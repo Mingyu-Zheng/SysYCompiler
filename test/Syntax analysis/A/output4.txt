@@ -1305,7 +1305,7 @@ SEMICN ;
 <Stmt>
 IDENFR p
 LBRACK [
-INTCON 1
+INTCON 0
 <Number>
 <PrimaryExp>
 <UnaryExp>

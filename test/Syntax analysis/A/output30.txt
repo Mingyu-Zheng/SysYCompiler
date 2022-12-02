@@ -1093,7 +1093,7 @@ SEMICN ;
 <VarDecl>
 IDENFR C
 LBRACK [
-INTCON 1
+INTCON 0
 <Number>
 <PrimaryExp>
 <UnaryExp>
@@ -1122,7 +1122,7 @@ SEMICN ;
 <Stmt>
 IDENFR C
 LBRACK [
-INTCON 2
+INTCON 1
 <Number>
 <PrimaryExp>
 <UnaryExp>

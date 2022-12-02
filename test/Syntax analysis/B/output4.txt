@@ -604,6 +604,7 @@ INTCON 2
 RBRACK ]
 ASSIGN =
 LBRACE {
+LBRACE {
 IDENFR CON_arr
 LBRACK [
 INTCON 0
@@ -638,6 +639,8 @@ RBRACK ]
 <MulExp>
 <AddExp>
 <Exp>
+<InitVal>
+RBRACE }
 <InitVal>
 RBRACE }
 <InitVal>

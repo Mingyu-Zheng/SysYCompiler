@@ -11,7 +11,7 @@ public class MipsGlobalDef extends Mips{
     protected String valuestr = "";
     protected int[] valuearr = null;
     private boolean isarr = false;
-    private String[] kinds = {".word", ".assicz"};
+    private String[] kinds = {".word", ".asciiz"};
 
     public MipsGlobalDef(String name, VarType type, String valuestr, int[] valuearr){
         this.name = "g" + name.substring(1);
@@ -33,7 +33,7 @@ public class MipsGlobalDef extends Mips{
 
     @Override
     public int writeMips(Writer writer) {
-        String line = "    " + this.name + ": " + this.kind + " ";
+        String line = "    " + this.name + ": " + this.kinds[this.kind] + " ";
         if(this.kind == 0 && this.isarr == true){
             for(int i = 0;i < this.valuearr.length; i++){
                 line += this.valuearr[i];
@@ -46,6 +46,7 @@ public class MipsGlobalDef extends Mips{
         } else {
             line += this.valuestr + "\n";
         }
+        writer.addStr(line);
         return 0;
     }
 }
