@@ -28,6 +28,10 @@ public class Operator extends User{
         return ret;
     }
 
+    public VarType getVarType(){
+        return varType;
+    }
+
     public String printType(){
         return this.varType.getTypeName();
     }

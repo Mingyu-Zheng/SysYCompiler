@@ -171,6 +171,7 @@ public class ConstDef extends Vn{
 
         String name = this.vns.get(0).getToken().getValue();
         Symbol symbol = new Symbol(name, SymbolKind.CONST);
+        symbol.setInit(true);
         Vn constInitVal = null;
         int constInitValue = 0;
 
@@ -189,7 +190,7 @@ public class ConstDef extends Vn{
         } else {
             array = valueProcess(dim, symbol, constInitVal, symbolTable, dimarr);
             symbolTable.addSymbol2Global(symbol);
-            ((ValueModule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.ARRAY, array));
+            ((ValueModule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.ARRAY, symbol.isInit(), array));
         }
         return ret;
     }
@@ -203,6 +204,7 @@ public class ConstDef extends Vn{
 
         String name = this.vns.get(0).getToken().getValue();
         Symbol symbol = new Symbol(name, SymbolKind.CONST);
+        symbol.setInit(true);
         Vn constInitVal = null;
         int constInitValue = 0;
 

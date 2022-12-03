@@ -10,6 +10,7 @@ public class Symbol{
     private int arrayDim = 0;
     private ArrayList<Integer> dimarray = new ArrayList<>();
     private int[] arrayValue = null;
+    private boolean isInit = false;
 
     private SymbolFuncType funcType;
     private int funcFParamNum = 0;
@@ -53,6 +54,14 @@ public class Symbol{
 
     public void setConstvalue(int constvalue) {
         this.constvalue = constvalue;
+    }
+
+    public boolean isInit() {
+        return isInit;
+    }
+
+    public void setInit(boolean init) {
+        isInit = init;
     }
 
     public ArrayList<Integer> getDimarray() {

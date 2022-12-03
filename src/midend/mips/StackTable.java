@@ -87,13 +87,14 @@ public class StackTable {
             String rsresult = ins.getOp1Name();
             String rtresult = ins.getResult();
             VarType resultType = ins.getVarType();
+            VarType rsType = ins.getOp1().getVarType();
             int off = 0;
             Reg rs = null;
             if(rsresult.isEmpty()){
                 off = Integer.parseInt(ins.getOp1().printVar());
                 rs = Reg.ZERO;
             } else {
-                rs = this.getSymbolReg(rsresult, mipsBlock);
+                rs = this.getSymbolReg(rsresult, rsType, mipsBlock);
             }
             Reg rt = this.getSymbolReg(rtresult, resultType, mipsBlock);
             mipsBlock.addIns(new Imm("addi", rs, rt, ins.getI16() + off));
@@ -117,8 +118,9 @@ public class StackTable {
             String rdresult = ins.getResult();
             VarType resultType = ins.getVarType();
             String rsresult = ins.getOp1Name();
+            VarType rsType = ins.getOp1().getVarType();
             String rtresult = ins.getOp2Name();
-            Reg rs = this.getSymbolReg(rsresult, mipsBlock);
+            Reg rs = this.getSymbolReg(rsresult, rsType, mipsBlock);
             Reg rt = this.getSymbolReg(rtresult, mipsBlock);
             Reg rd = this.getSymbolReg(rdresult, resultType, mipsBlock);
             mipsBlock.addIns(new Ins(ins.getInsName(),rs,rt,rd));
@@ -184,7 +186,8 @@ public class StackTable {
                 int offset = -8;
                 for(Operator operator:operators){
                     String rtresult = operator.getVarName();
-                    Reg rt = this.getSymbolReg(rtresult, mipsBlock);
+                    VarType rtType = operator.getVarType();
+                    Reg rt = this.getSymbolReg(rtresult, rtType, mipsBlock);
                     mipsBlock.addIns(new Imm("sw",Reg.SP,rt,offset));
                     offset = offset - 4;
                 }
@@ -194,6 +197,7 @@ public class StackTable {
                     String rtresult = ins.getResult();
                     Reg rt = this.getSymbolReg(rtresult, mipsBlock);
                     mipsBlock.addIns(new Imm("addi",Reg.V0,rt,0));
+                    mipsBlock.addIns(new Imm("sw", Reg.SP, rt, stackMap.getOffset(rtresult)));
                 }
             }
         } else if(ins instanceof InsRet){
@@ -313,10 +317,7 @@ public class StackTable {
             } else {
                 if(item.isStack){
                     ret = blockGetNewReg(mipsBlock);
-                    mipsBlock.addIns(new Imm("addiu", Reg.SP, ret, item.getOffset()));
-                } else if(item.isPointer){
-                    ret = blockGetNewReg(mipsBlock);
-                    mipsBlock.addIns(new Lai("la",ret, item.getResult()));
+                    mipsBlock.addIns(new Imm("addi", Reg.SP, ret, item.getOffset()));
                 } else {
                     ret = blockGetNewReg(mipsBlock);
                     mipsBlock.addIns(new Imm("lw", Reg.SP, ret, item.getOffset()));

@@ -1,64 +1,36 @@
-/*
-// Created by emilyu on 2022/9/6.
-// C
-*/
-const int Mod = 389, N = 100005;
-int a_to_the_a, cnt = 0;
-int n = 9;
-
-int qpow(int a, int b) {                            // int func with params
-    int ans = 1;
-
-    while (b) {
-        b = b / 2;
-        a = (a * a) % Mod;
-        if (b % 2) {
-            ans = (ans * a) % Mod;
-        }
-    }
-
-    return ans;
-}
-
-int gcd(int a, int b) {                             // int recursion
-    if (!b) {
-        return a;
-    }
-    return gcd(b, a % b);
-}
-
-int testExp() {                                     // int func without param
-    a_to_the_a = n * n;
-                        // single exp without using its value;
-
-    int b = a_to_the_a + 1;
-
-    int e = qpow(a_to_the_a, b);
-
-
-
-    int f = n, g = 0;
-    if (f < 0) {
-        g = 10;
-    } else {
-        if (f > 10) {
-            g = 20;
-        } else {
-            if (f == n) {
-                g = 30;
-            }
-        }
-    }
-    if (f <= 10) {
-        g = g + f;
-    }
-
-
-
-    return gcd(f, g);                                    // a stmt not simplified
-}
-
-int main() {
-    printf("Exptest: %d\n", testExp());
-    return 0;
+int main(){
+	int a = 0,b=0;
+	a=getint();
+	b=getint();
+	printf("20373276\n");
+	int c=0;
+	int flag=0;
+	if ( a==1 ) c=1;
+	else {c=3;}
+	printf("%d",c);
+	if (a==2) c=2;
+	while ( c<1000 ) {
+		if ( a==1 ) {
+			break;
+		}
+		if ( a!=1 && flag==0 ) {
+			a=a-1;
+			flag=1;
+			continue;
+		}
+		a=a-1;
+		b=b+1;
+		c=c+1;
+	}
+	printf("%d",a);
+	printf("%d",b);
+	printf("%d",c);
+	if (a>5) printf("1");
+	if (a<5) printf("2");
+	if (a>=5) printf("3");
+	if (a<=5) printf("4");
+	if (a==1 && b==4) {
+		printf("6");
+	}
+	return 0;
 }

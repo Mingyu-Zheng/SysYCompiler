@@ -11,9 +11,9 @@ public class MipsGlobalDef extends Mips{
     protected String valuestr = "";
     protected int[] valuearr = null;
     private boolean isarr = false;
-    private String[] kinds = {".word", ".asciiz"};
+    private String[] kinds = {".word", ".asciiz", ".space"};
 
-    public MipsGlobalDef(String name, VarType type, String valuestr, int[] valuearr){
+    public MipsGlobalDef(String name, VarType type, String valuestr, boolean isInit, int[] valuearr){
         this.name = "g" + name.substring(1);
         if(type.equals(VarType.STR)){
             this.kind = 1;
@@ -21,6 +21,9 @@ public class MipsGlobalDef extends Mips{
             this.kind = 0;
             if(type.equals(VarType.ARRAY)){
                 this.isarr = true;
+                if(!isInit){
+                    this.kind = 2;
+                }
             }
         }
         this.valuestr = valuestr;
@@ -43,6 +46,8 @@ public class MipsGlobalDef extends Mips{
                     line += "\n";
                 }
             }
+        } else if(this.kind == 2){
+            line += this.valuearr.length * 4 + "\n";
         } else {
             line += this.valuestr + "\n";
         }

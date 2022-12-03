@@ -41,7 +41,7 @@ public class ValueModule extends Value{
         int ret = 0;
         for(ValueGlobalDef globalDecl:globalDecls){
             MipsGlobalDef globalDef = new MipsGlobalDef(globalDecl.result,globalDecl.varType,
-                    globalDecl.valuestr,globalDecl.valuearray);
+                    globalDecl.valuestr, globalDecl.isInit, globalDecl.valuearray);
             ((MipsModule) mips).addGlobalDef(globalDef);
         }
         for(ValueFuncDef funcDef:funcDefs){

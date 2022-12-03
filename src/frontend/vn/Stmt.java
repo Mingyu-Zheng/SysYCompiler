@@ -486,9 +486,10 @@ public class Stmt extends Vn{
                         andcount++;
                         blockloop.addNextBlock(blockeq);
                         if(vneq.vns.size() > 1){
-                            Vn vneq1 = vneq.vns.get(1);
-                            int retleft = vneq.vns.get(0).RLLVM(symbolTable, blockeq);
-                            int retright = ((EqExp) vneq).RLLVM(symbolTable, blockeq, true, 2);
+                            int indexeq = vneq.vns.size() - 3;
+                            Vn vneq1 = vneq.vns.get(indexeq + 1);
+                            int retleft = ((EqExp) vneq).RLLVM(symbolTable, blockeq, true, indexeq);
+                            int retright = vneq.vns.get(indexeq + 2).RLLVM(symbolTable, blockeq);
                             Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retleft));
                             Operator opr = new Operator(VarType.INT, symbolTable.getRegByIndex(retright));
                             if(vneq1.getToken().getValue().equals("==")){
@@ -499,9 +500,10 @@ public class Stmt extends Vn{
                         } else {
                             Vn vnrel = vneq.vns.get(0);
                             if(vnrel.vns.size() > 1){
-                                Vn vnrel1 = vnrel.vns.get(1);
-                                int retleft = vnrel.vns.get(0).RLLVM(symbolTable, blockeq);
-                                int retright = ((RelExp) vnrel).RLLVM(symbolTable, blockeq, true, 2);
+                                int indexrel = vnrel.vns.size() - 3;
+                                Vn vnrel1 = vnrel.vns.get(indexrel + 1);
+                                int retleft = ((RelExp) vnrel).RLLVM(symbolTable, blockeq, true, indexrel);
+                                int retright = vnrel.vns.get(indexrel + 2).RLLVM(symbolTable, blockeq);
                                 Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retleft));
                                 Operator opr = new Operator(VarType.INT, symbolTable.getRegByIndex(retright));
                                 if(vnrel1.getToken().getValue().equals(">")){
@@ -516,7 +518,7 @@ public class Stmt extends Vn{
                             } else {
                                 int retindex = vnrel.vns.get(0).RLLVM(symbolTable, blockeq);
                                 Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retindex));
-                                Operator opr = new Operator(VarType.INT, 0);
+                                Operator opr = new Operator(VarType.INT, "0");
                                 blockeq.addInstruction(new BranchBeq(opl, opr, blocktarget));
                             }
                         }
@@ -587,9 +589,10 @@ public class Stmt extends Vn{
                         andcount++;
                         ((BasicBlock) value).addNextBlock(blockeq);
                         if(vneq.vns.size() > 1){
-                            Vn vneq1 = vneq.vns.get(1);
-                            int retleft = vneq.vns.get(0).RLLVM(symbolTable, blockeq);
-                            int retright = ((EqExp) vneq).RLLVM(symbolTable, blockeq, true, 2);
+                            int indexeq = vneq.vns.size() - 3;
+                            Vn vneq1 = vneq.vns.get(indexeq + 1);
+                            int retleft = ((EqExp) vneq).RLLVM(symbolTable, blockeq, true, indexeq);
+                            int retright = vneq.vns.get(indexeq + 2).RLLVM(symbolTable, blockeq);
                             Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retleft));
                             Operator opr = new Operator(VarType.INT, symbolTable.getRegByIndex(retright));
                             if(vneq1.getToken().getValue().equals("==")){
@@ -600,9 +603,10 @@ public class Stmt extends Vn{
                         } else {
                             Vn vnrel = vneq.vns.get(0);
                             if(vnrel.vns.size() > 1){
-                                Vn vnrel1 = vnrel.vns.get(1);
-                                int retleft = vnrel.vns.get(0).RLLVM(symbolTable, blockeq);
-                                int retright = ((RelExp) vnrel).RLLVM(symbolTable, blockeq, true, 2);
+                                int indexrel = vnrel.vns.size() - 3;
+                                Vn vnrel1 = vnrel.vns.get(indexrel + 1);
+                                int retleft = ((RelExp) vnrel).RLLVM(symbolTable, blockeq, true, indexrel);
+                                int retright = vnrel.vns.get(indexrel + 2).RLLVM(symbolTable, blockeq);
                                 Operator opl = new Operator(VarType.INT, symbolTable.getRegByIndex(retleft));
                                 Operator opr = new Operator(VarType.INT, symbolTable.getRegByIndex(retright));
                                 if(vnrel1.getToken().getValue().equals(">")){

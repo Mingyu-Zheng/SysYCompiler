@@ -106,6 +106,7 @@ public class VarDef extends Vn{
                 constInitValue = initVal.vns.get(0).computeValue(symbolTable);
             }
             symbol.setConstvalue(constInitValue);
+            symbol.setInit(true);
         }
         return constInitValue;
     }
@@ -147,6 +148,7 @@ public class VarDef extends Vn{
                         }
                     }
                 }
+                symbol.setInit(true);
             } else {
                 for(int i = 0;i < array.length;i++){
                     array[i] = 0;
@@ -213,6 +215,7 @@ public class VarDef extends Vn{
             symbol.setType(SymbolType.ARRAY);
             symbol.setArrayDim(dim);
             symbol.setDimarray(dimarr);
+            ((BasicBlock) value).addInstruction(new InsAlloc(symbolTable.getRegByIndex(ret),VarType.ARRAY, memSize));
             int sz = dimarr.get(1);
             if(initVal != null){
                 int i = 0;
@@ -221,7 +224,7 @@ public class VarDef extends Vn{
                         int j = 0;
                         for(Vn vn1:vn.vns){
                             if(vn1 instanceof InitVal){
-                                newindex = vn.RLLVM(symbolTable,value);
+                                newindex = vn1.RLLVM(symbolTable,value);
                                 Operator op1 = new Operator(VarType.INT, symbolTable.getRegByIndex(newindex));
                                 Operator op2 = new Operator(VarType.INT_POINTER,symbolTable.getRegByIndex(ret));
                                 ((BasicBlock) value).addInstruction(new InsStore(VarType.INT, op1, op2, (i * sz + j) * 4));
@@ -264,7 +267,7 @@ public class VarDef extends Vn{
         } else {
             array = valueProcess(dim, symbol, initVal, symbolTable, dimarr);
             symbolTable.addSymbol2Global(symbol);
-            ((ValueModule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.ARRAY, array));
+            ((ValueModule) value).addGlobalDecl(new ValueGlobalDef(name, VarType.ARRAY, symbol.isInit(), array));
         }
         return ret;
     }

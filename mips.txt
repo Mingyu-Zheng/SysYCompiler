@@ -1,11 +1,10 @@
 .data
-    gMod: .word 389
-    gN: .word 100005
-    ga_to_the_a: .word 0
-    gcnt: .word 0
-    gn: .word 1
-    g0s0: .asciiz "Exptest: "
-    g0s1: .asciiz "\n"
+    g0s0: .asciiz "20373276\n"
+    g0s1: .asciiz "1"
+    g0s2: .asciiz "2"
+    g0s3: .asciiz "3"
+    g0s4: .asciiz "4"
+    g0s5: .asciiz "6"
 
 .text
 
@@ -16,238 +15,210 @@
     li $v0, 10
     syscall
 
-fqpow:
-    sw $ra, -4($sp)
-    addi $sp, $sp, -100
-
-bqpow_label0:
-    li $t0, 1
-    sw $t0, 84($sp)
-
-bqpow_label1:
-
-bqpow_label2:
-    lw $t1, 88($sp)
-    beq $t1, $t2, bqpow_label8
-
-bqpow_label3:
-    lw $t3, 88($sp)
-    li $t4, 2
-    div $t5, $t3, $t4
-    sw $t5, 88($sp)
-    lw $t6, 92($sp)
-    lw $t7, 92($sp)
-    mul $t8, $t6, $t7
-    la $t9, gMod
-    lw $s0, 0($t9)
-    rem $s1, $t8, $s0
-    sw $s1, 92($sp)
-
-bqpow_label4:
-    lw $s2, 88($sp)
-    li $s3, 2
-    rem $s4, $s2, $s3
-    beq $s4, $0, bqpow_label6
-
-bqpow_label5:
-    lw $s5, 84($sp)
-    lw $s6, 92($sp)
-    mul $s7, $s5, $s6
-    la $gp, gMod
-    lw $k0, 0($gp)
-    rem $k1, $s7, $k0
-    sw $k1, 84($sp)
-
-bqpow_label6:
-
-bqpow_label7:
-    j bqpow_label1
-
-bqpow_label8:
-    lw $a1, 84($sp)
-    addi $v0, $a1, 0
-    lw $ra, 96($sp)
-    addi $sp, $sp, 100
-    jr $ra
-
-fgcd:
-    sw $ra, -4($sp)
-    addi $sp, $sp, -44
-
-bgcd_label0:
-
-bgcd_label1:
-    lw $t0, 32($sp)
-    seq $t1, $t0, $0
-    beq $t1, $0, bgcd_label3
-
-bgcd_label2:
-    lw $t2, 36($sp)
-    addi $v0, $t2, 0
-    lw $ra, 40($sp)
-    addi $sp, $sp, 44
-    jr $ra
-
-bgcd_label3:
-    lw $t3, 32($sp)
-    lw $t4, 36($sp)
-    lw $t5, 32($sp)
-    rem $t6, $t4, $t5
-    sw $t3, -8($sp)
-    sw $t6, -12($sp)
-    sw $t0, 28($sp)
-    sw $t1, 24($sp)
-    sw $t2, 20($sp)
-    sw $t3, 16($sp)
-    sw $t4, 12($sp)
-    sw $t5, 8($sp)
-    sw $t6, 4($sp)
-    jal fgcd
-    addi $t7, $v0, 0
-    addi $v0, $t7, 0
-    lw $ra, 40($sp)
-    addi $sp, $sp, 44
-    jr $ra
-
-ftestExp:
-    sw $ra, -4($sp)
-    addi $sp, $sp, -160
-
-btestExp_label0:
-    la $t0, ga_to_the_a
-    la $t1, gn
-    lw $t2, 0($t1)
-    la $t3, gn
-    lw $t4, 0($t3)
-    mul $t5, $t2, $t4
-    sw $t5, 0($t0)
-    la $t6, ga_to_the_a
-    lw $t7, 0($t6)
-    li $t8, 1
-    add $t9, $t7, $t8
-    sw $t9, 128($sp)
-    la $s0, ga_to_the_a
-    lw $s1, 0($s0)
-    lw $s2, 128($sp)
-    sw $s1, -8($sp)
-    sw $s2, -12($sp)
-    sw $t0, 152($sp)
-    sw $t1, 148($sp)
-    sw $t2, 144($sp)
-    sw $t3, 140($sp)
-    sw $t4, 136($sp)
-    sw $t6, 124($sp)
-    sw $t7, 120($sp)
-    sw $t8, 116($sp)
-    sw $s0, 104($sp)
-    sw $s1, 100($sp)
-    sw $s2, 96($sp)
-    jal fqpow
-    addi $s3, $v0, 0
-    sw $s3, 108($sp)
-    la $s4, gn
-    lw $s5, 0($s4)
-    sw $s5, 88($sp)
-    li $s6, 0
-    sw $s6, 76($sp)
-
-btestExp_label1:
-    lw $s7, 88($sp)
-    li $gp, 0
-    bge $s7, $gp, btestExp_label2
-    j btestExp_label10
-
-btestExp_label2:
-
-btestExp_label3:
-    lw $k0, 88($sp)
-    li $k1, 10
-    ble $k0, $k1, btestExp_label4
-    j btestExp_label8
-
-btestExp_label4:
-
-btestExp_label5:
-    lw $a1, 88($sp)
-    la $a2, gn
-    lw $a3, 0($a2)
-    bne $a1, $a3, btestExp_label7
-
-btestExp_label6:
-    li $v1, 30
-    sw $v1, 76($sp)
-
-btestExp_label7:
-    j btestExp_label9
-
-btestExp_label8:
-    li $t5, 20
-    sw $t5, 76($sp)
-
-btestExp_label9:
-    j btestExp_label11
-
-btestExp_label10:
-    li $t9, 10
-    sw $t9, 76($sp)
-
-btestExp_label11:
-
-btestExp_label12:
-    lw $t0, 88($sp)
-    li $t1, 10
-    bgt $t0, $t1, btestExp_label14
-
-btestExp_label13:
-    lw $t2, 76($sp)
-    lw $t3, 88($sp)
-    add $t4, $t2, $t3
-    sw $t4, 76($sp)
-
-btestExp_label14:
-    lw $t6, 88($sp)
-    lw $t7, 76($sp)
-    sw $t6, -8($sp)
-    sw $t7, -12($sp)
-    sw $s4, 84($sp)
-    sw $s7, 68($sp)
-    sw $gp, 64($sp)
-    sw $k0, 60($sp)
-    sw $k1, 56($sp)
-    sw $a1, 52($sp)
-    sw $a2, 48($sp)
-    sw $a3, 44($sp)
-    sw $t0, 28($sp)
-    sw $t1, 24($sp)
-    sw $t2, 20($sp)
-    sw $t3, 16($sp)
-    sw $t6, 8($sp)
-    sw $t7, 4($sp)
-    jal fgcd
-    addi $t8, $v0, 0
-    addi $v0, $t8, 0
-    lw $ra, 156($sp)
-    addi $sp, $sp, 160
-    jr $ra
-
 fmain:
     sw $ra, -4($sp)
-    addi $sp, $sp, -12
+    addi $sp, $sp, -224
 
 bmain_label0:
-    jal ftestExp
-    addi $t0, $v0, 0
+    li $t0, 0
+    sw $t0, 216($sp)
+    li $t1, 0
+    sw $t1, 208($sp)
+    li $v0, 5
+    syscall
+    addi $t2, $v0, 0
+    sw $t2, 216($sp)
+    li $v0, 5
+    syscall
+    addi $t3, $v0, 0
+    sw $t3, 208($sp)
     la $a0, g0s0
     li $v0, 4
     syscall
+    li $t4, 0
+    sw $t4, 192($sp)
+    li $t5, 0
+    sw $t5, 184($sp)
+
+bmain_label1:
+    lw $t6, 216($sp)
+    li $t7, 1
+    bne $t6, $t7, bmain_label2
+    j bmain_label3
+
+bmain_label2:
+    li $t8, 3
+    sw $t8, 192($sp)
+    j bmain_label4
+
+bmain_label3:
+    li $t9, 1
+    sw $t9, 192($sp)
+
+bmain_label4:
+    lw $s0, 192($sp)
+    addi $a0, $s0, 0
+    li $v0, 1
+    syscall
+
+bmain_label5:
+    lw $s1, 216($sp)
+    li $s2, 2
+    bne $s1, $s2, bmain_label7
+
+bmain_label6:
+    li $s3, 2
+    sw $s3, 192($sp)
+
+bmain_label7:
+
+bmain_label8:
+
+bmain_label9:
+    lw $s4, 192($sp)
+    li $s5, 1000
+    bge $s4, $s5, bmain_label19
+
+bmain_label10:
+
+bmain_label11:
+    lw $s6, 216($sp)
+    li $s7, 1
+    bne $s6, $s7, bmain_label13
+
+bmain_label12:
+    j bmain_label19
+
+bmain_label13:
+
+bmain_label14:
+    lw $gp, 216($sp)
+    li $k0, 1
+    beq $gp, $k0, bmain_label17
+
+bmain_label15:
+    lw $k1, 184($sp)
+    li $a1, 0
+    bne $k1, $a1, bmain_label17
+
+bmain_label16:
+    lw $a2, 216($sp)
+    li $a3, 1
+    sub $v1, $a2, $a3
+    sw $v1, 216($sp)
+    li $t0, 1
+    sw $t0, 184($sp)
+    j bmain_label8
+
+bmain_label17:
+    lw $t1, 216($sp)
+    li $t2, 1
+    sub $t3, $t1, $t2
+    sw $t3, 216($sp)
+    lw $t4, 208($sp)
+    li $t5, 1
+    addu $t8, $t4, $t5
+    sw $t8, 208($sp)
+    lw $t9, 192($sp)
+    li $s3, 1
+    addu $v1, $t9, $s3
+    sw $v1, 192($sp)
+
+bmain_label18:
+    j bmain_label8
+
+bmain_label19:
+    lw $t0, 216($sp)
     addi $a0, $t0, 0
     li $v0, 1
     syscall
+    lw $t3, 208($sp)
+    addi $a0, $t3, 0
+    li $v0, 1
+    syscall
+    lw $t8, 192($sp)
+    addi $a0, $t8, 0
+    li $v0, 1
+    syscall
+
+bmain_label20:
+    lw $v1, 216($sp)
+    sw $t6, 176($sp)
+    li $t6, 5
+    ble $v1, $t6, bmain_label22
+
+bmain_label21:
     la $a0, g0s1
     li $v0, 4
     syscall
-    li $t1, 0
-    addi $v0, $t1, 0
-    lw $ra, 8($sp)
-    addi $sp, $sp, 12
+
+bmain_label22:
+
+bmain_label23:
+    sw $t7, 172($sp)
+    lw $t7, 216($sp)
+    sw $s0, 160($sp)
+    li $s0, 5
+    bge $t7, $s0, bmain_label25
+
+bmain_label24:
+    la $a0, g0s2
+    li $v0, 4
+    syscall
+
+bmain_label25:
+
+bmain_label26:
+    sw $s1, 156($sp)
+    lw $s1, 216($sp)
+    sw $s2, 152($sp)
+    li $s2, 5
+    blt $s1, $s2, bmain_label28
+
+bmain_label27:
+    la $a0, g0s3
+    li $v0, 4
+    syscall
+
+bmain_label28:
+
+bmain_label29:
+    sw $s4, 144($sp)
+    lw $s4, 216($sp)
+    sw $s5, 140($sp)
+    li $s5, 5
+    bgt $s4, $s5, bmain_label31
+
+bmain_label30:
+    la $a0, g0s4
+    li $v0, 4
+    syscall
+
+bmain_label31:
+
+bmain_label32:
+    sw $s6, 136($sp)
+    lw $s6, 216($sp)
+    sw $s7, 132($sp)
+    li $s7, 1
+    bne $s6, $s7, bmain_label35
+
+bmain_label33:
+    sw $gp, 128($sp)
+    lw $gp, 208($sp)
+    sw $k0, 124($sp)
+    li $k0, 4
+    bne $gp, $k0, bmain_label35
+
+bmain_label34:
+    la $a0, g0s5
+    li $v0, 4
+    syscall
+
+bmain_label35:
+    sw $k1, 120($sp)
+    li $k1, 0
+    addi $v0, $k1, 0
+    lw $ra, 220($sp)
+    addi $sp, $sp, 224
     jr $ra

@@ -10,6 +10,7 @@ public class ValueGlobalDef extends Value{
     protected int value = 0;
     protected String valuestr = "0";
     protected int[] valuearray = null;
+    protected boolean isInit = false;
 
     public ValueGlobalDef(String result, VarType varType, int value){
         this.result = "@" + result;
@@ -24,23 +25,28 @@ public class ValueGlobalDef extends Value{
         this.valuestr = str;
     }
 
-    public ValueGlobalDef(String result, VarType varType, int[] array){
+    public ValueGlobalDef(String result, VarType varType, boolean isInit,int[] array){
         this.result = "@" + result;
         this.varType = varType;
         this.valuearray = array;
+        this.isInit = isInit;
     }
 
     @Override
     public int writeValue(Writer writer) {
         String line = this.getResult() + " = global " + this.varType.getTypeName() + " ";
         if(this.varType.equals(VarType.ARRAY)){
-            for(int i = 0;i < this.valuearray.length; i++){
-                line += this.valuearray[i];
-                if(i < this.valuearray.length - 1){
-                    line += ", ";
-                } else {
-                    line += "\n";
+            if(isInit){
+                for(int i = 0;i < this.valuearray.length; i++){
+                    line += this.valuearray[i];
+                    if(i < this.valuearray.length - 1){
+                        line += ", ";
+                    } else {
+                        line += "\n";
+                    }
                 }
+            } else {
+                line += "[" + this.valuearray.length * 4 + "]";
             }
         } else {
             line += this.valuestr + "\n";

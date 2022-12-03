@@ -52,14 +52,14 @@ public class EqExp extends Vn {
 
     @Override
     public int RLLVM(SymbolTable symbolTable, Value value) {
-        return this.RLLVM(symbolTable, value, true, 0);
+        return this.RLLVM(symbolTable, value, true, this.vns.size() - 1);
     }
 
     public int RLLVM(SymbolTable symbolTable, Value value, boolean isCond, int index) {
         int lastindex = -1;
         int ansindex = 0;
         Vn op = null;
-        for(int i = index; i < vns.size();i++){
+        for(int i = 0; i <= index ;i++){
             Vn vn = vns.get(i);
             if(!vn.isVt){
                 ansindex = vn.RLLVM(symbolTable,value);
