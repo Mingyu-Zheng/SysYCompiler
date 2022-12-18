@@ -70,12 +70,15 @@ public class Stmt extends Vn{
             line = token.getLine();
             token = Token.nextToken();
             if (!token.isType(TokenType.SEMICN)){
-                Token.retractToken();
-                Exp exp = new Exp();
-                exp.RExp();
-                this.addVn(exp);
-                line = exp.getEndLine();
-                token = Token.nextToken();
+                if(token.isType(TokenType.LPARENT) || token.isType(TokenType.PLUS) || token.isType(TokenType.MINU)
+                        || token.isType(TokenType.IDENFR) || token.isType(TokenType.INTCON)){
+                    Token.retractToken();
+                    Exp exp = new Exp();
+                    exp.RExp();
+                    this.addVn(exp);
+                    line = exp.getEndLine();
+                    token = Token.nextToken();
+                }
             }
             if(token.isType(TokenType.SEMICN)){
                 this.addToken(token);
@@ -119,7 +122,7 @@ public class Stmt extends Vn{
                 this.addVn(stmt);
 
             } else {
-                Error.error("<frontend.vn.Stmt>");
+                Error.error("<Stmt>");
                 ret = -1;
             }
         } else if(token.isType(TokenType.IFTK)){
@@ -155,7 +158,7 @@ public class Stmt extends Vn{
                     Token.retractToken();
                 }
             } else {
-                Error.error("<frontend.vn.Stmt>");
+                Error.error("<Stmt>");
                 ret = -1;
             }
         } else if(token.isType(TokenType.LBRACE)){
@@ -358,6 +361,11 @@ public class Stmt extends Vn{
                 } else if(!isStringExpNum(formatString)){
                     Error.addError(new Error(vn0.getEndLine(), ErrorType.PRINTF_NUMBER));
                     ret = -1;
+                }
+                for(Vn vnexp:vns){
+                    if(vnexp instanceof Exp){
+                        vnexp.RAnalysis(symbolTable);
+                    }
                 }
             }
         } else {

@@ -8,7 +8,7 @@ import utils.Writer;
 public class Btype extends Vn{
 
     public Btype(){
-        super("<frontend.vn.Btype>");
+        super("<Btype>");
     }
     public int RBtype(){
         int ret = 0;
@@ -16,7 +16,7 @@ public class Btype extends Vn{
         if(token.isType(TokenType.INTTK)){
             this.addToken(token);
         } else {
-            Error.error("<frontend.vn.Btype>");
+            Error.error("<Btype>");
             ret = -1;
         }
         return ret;

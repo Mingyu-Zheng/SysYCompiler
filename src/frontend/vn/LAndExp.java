@@ -7,7 +7,7 @@ import utils.Writer;
 public class LAndExp extends Vn{
 
     public LAndExp(){
-        super("<frontend.vn.LAndExp>");
+        super("<LAndExp>");
     }
     public int RLAndExp(){
         int ret = 0;

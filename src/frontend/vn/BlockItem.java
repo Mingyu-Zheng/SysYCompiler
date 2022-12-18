@@ -10,7 +10,7 @@ import utils.Writer;
 public class BlockItem extends Vn{
 
     public BlockItem(){
-        super("<frontend.vn.BlockItem>");
+        super("<BlockItem>");
     }
     public int RBlockItem(){
         int ret = 0;

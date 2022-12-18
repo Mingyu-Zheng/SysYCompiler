@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class CompUnit extends Vn{
 
     public CompUnit(){
-        super("<frontend.vn.CompUnit>");
+        super("<CompUnit>");
     }
     public int RCompUnit(){
         int ret = 0;

@@ -13,7 +13,15 @@ public class Error implements Comparable<Error>{
     public static ArrayList<Error> errors = new ArrayList<>();
 
     public static int addError(Error e){
-        errors.add(e);
+        boolean flag = true;
+        for(Error error:errors){
+            if(e.line == error.line && e.type == error.type){
+                flag = false;
+            }
+        }
+        if(flag){
+            errors.add(e);
+        }
         return 0;
     }
 

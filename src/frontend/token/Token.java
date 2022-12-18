@@ -95,6 +95,7 @@ public class Token {
         return TokenType.isReserveWord(this.value);
     }
 
+
     public void updateReserveWord(){
         this.type = TokenType.typeReserveWord(this.value);
     }

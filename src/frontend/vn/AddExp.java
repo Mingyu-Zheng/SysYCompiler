@@ -12,7 +12,7 @@ import java.util.Base64;
 public class AddExp extends Vn{
 
     public AddExp(){
-        super("<frontend.vn.AddExp>");
+        super("<AddExp>");
     }
     public int RAddExp(){
         int ret = 0;

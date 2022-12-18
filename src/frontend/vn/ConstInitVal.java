@@ -7,7 +7,7 @@ import frontend.token.TokenType;
 public class ConstInitVal extends Vn{
 
     public ConstInitVal(){
-        super("<frontend.vn.ConstInitVal>");
+        super("<ConstInitVal>");
     }
     public int RConstInitVal(){
         int ret = 0;
@@ -33,13 +33,13 @@ public class ConstInitVal extends Vn{
                     this.addToken(token);
                 }
                 if(!token.isType(TokenType.RBRACE)){
-                    Error.error("<frontend.vn.ConstInitVal>");
+                    Error.error("<ConstInitVal>");
                     ret = -1;
                 }
                 this.addToken(token);
             } else {
                 if(!token.isType(TokenType.RBRACE)){
-                    Error.error("<frontend.vn.ConstInitVal>");
+                    Error.error("<ConstInitVal>");
                     ret = -1;
                 }
                 this.addToken(token);

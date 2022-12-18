@@ -12,7 +12,7 @@ import midend.llvm.Value;
 public class Block extends Vn{
 
     public Block(){
-        super("<frontend.vn.Block>");
+        super("<Block>");
     }
     public int RBlock(){
         int ret = 0;
@@ -32,7 +32,7 @@ public class Block extends Vn{
             }
             this.addToken(token);
         } else {
-            Error.error("<frontend.vn.Block>");
+            Error.error("<Block>");
             ret = -1;
         }
         return ret;

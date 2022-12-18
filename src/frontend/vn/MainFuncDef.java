@@ -11,7 +11,7 @@ import midend.llvm.*;
 public class MainFuncDef extends Vn{
 
     public MainFuncDef(){
-        super("<frontend.vn.MainFuncDef>");
+        super("<MainFuncDef>");
     }
     public int RMainFuncDef(){
         int ret = 0;

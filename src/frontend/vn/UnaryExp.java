@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class UnaryExp extends Vn{
 
     public UnaryExp(){
-        super("<frontend.vn.UnaryExp>");
+        super("<UnaryExp>");
     }
     public int RUnaryExp(){
         int ret = 0;

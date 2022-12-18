@@ -9,7 +9,7 @@ import midend.llvm.Value;
 public class InitVal extends Vn{
 
     public InitVal(){
-        super("<frontend.vn.InitVal>");
+        super("<InitVal>");
     }
     public int RInitVal(){
         int ret = 0;
@@ -37,7 +37,7 @@ public class InitVal extends Vn{
                     }
                 }
                 if(!token.isType(TokenType.RBRACE)){
-                    Error.error("<frontend.vn.InitVal>");
+                    Error.error("<InitVal>");
                     ret = -1;
                 }
             } else {

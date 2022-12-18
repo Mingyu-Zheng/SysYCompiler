@@ -10,7 +10,7 @@ import midend.llvm.*;
 public class PrimaryExp extends Vn{
 
     public PrimaryExp(){
-        super("<frontend.vn.PrimaryExp>");
+        super("<PrimaryExp>");
     }
     public int RPrimaryExp(){
         int ret = 0;
@@ -24,7 +24,7 @@ public class PrimaryExp extends Vn{
             if(token.isType(TokenType.RPARENT)){
                 this.addToken(token);
             } else {
-                Error.error("<frontend.vn.PrimaryExp>");
+                Error.error("<PrimaryExp>");
                 ret = -1;
             }
         } else if(token.isType(TokenType.IDENFR)){
@@ -38,7 +38,7 @@ public class PrimaryExp extends Vn{
             number.RNumber();
             this.addVn(number);
         } else {
-            Error.error("<frontend.vn.PrimaryExp>");
+            Error.error("<PrimaryExp>");
             ret = -1;
         }
         return ret;

@@ -10,7 +10,7 @@ import utils.Writer;
 public class Decl extends Vn{
 
     public Decl(){
-        super("<frontend.vn.Decl>");
+        super("<Decl>");
     }
     public int RDecl(){
         Token token = Token.nextToken();
@@ -28,7 +28,7 @@ public class Decl extends Vn{
         }
         else {
             Token.retractToken();
-            Error.error("<frontend.vn.Decl>");
+            Error.error("<Decl>");
         }
         return 0;
     }

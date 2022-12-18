@@ -10,7 +10,7 @@ import utils.Writer;
 public class MulExp extends Vn{
 
     public MulExp(){
-        super("<frontend.vn.MulExp>");
+        super("<MulExp>");
     }
     public int RMulExp(){
         int ret = 0;

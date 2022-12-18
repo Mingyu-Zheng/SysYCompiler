@@ -7,7 +7,7 @@ import frontend.token.TokenType;
 public class UnaryOp extends Vn{
 
     public UnaryOp(){
-        super("<frontend.vn.UnaryOp>");
+        super("<UnaryOp>");
     }
     public int RUnaryOp(){
         int ret = 0;
@@ -15,7 +15,7 @@ public class UnaryOp extends Vn{
         if(token.isType(TokenType.PLUS) || token.isType(TokenType.MINU) || token.isType(TokenType.NOT)){
             this.addToken(token);
         } else {
-            Error.error("<frontend.vn.UnaryOp>");
+            Error.error("<UnaryOp>");
             ret = -1;
         }
         return ret;

@@ -7,7 +7,7 @@ import frontend.token.TokenType;
 public class FuncType extends Vn{
 
     public FuncType(){
-        super("<frontend.vn.FuncType>");
+        super("<FuncType>");
     }
     public int RFuncType(){
         int ret = 0;
@@ -17,7 +17,7 @@ public class FuncType extends Vn{
         } else if(token.isType(TokenType.VOIDTK)){
             this.addToken(token);
         } else {
-            Error.error("<frontend.vn.FuncType>");
+            Error.error("<FuncType>");
             ret = -1;
         }
         return ret;

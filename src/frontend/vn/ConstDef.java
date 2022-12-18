@@ -48,11 +48,11 @@ public class ConstDef extends Vn{
                 constInitVal.RConstInitVal();
                 this.addVn(constInitVal);
             } else {
-                Error.error("<frontend.vn.ConstDef>");
+                Error.error("<ConstDef>");
                 ret = -1;
             }
         } else {
-            Error.error("<frontend.vn.ConstDef>");
+            Error.error("<ConstDef>");
             ret = -1;
         }
         return ret;
@@ -81,6 +81,14 @@ public class ConstDef extends Vn{
             ret = -1;
         } else {
             symbolTable.addSymbol(symbol);
+        }
+        for(Vn vninit:vns){
+            if(vninit instanceof ConstInitVal){
+                int renew = vninit.RAnalysis(symbolTable);
+                if(renew == -1){
+                    ret = -1;
+                }
+            }
         }
         return ret;
     }

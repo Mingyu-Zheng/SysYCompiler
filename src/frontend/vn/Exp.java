@@ -6,7 +6,7 @@ import frontend.symbol.SymbolTable;
 public class Exp extends Vn{
 
     public Exp(){
-        super("<frontend.vn.Exp>");
+        super("<Exp>");
     }
     public int RExp(){
         AddExp addExp = new AddExp();

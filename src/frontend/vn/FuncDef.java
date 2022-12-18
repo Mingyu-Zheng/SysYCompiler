@@ -10,7 +10,7 @@ import midend.llvm.*;
 public class FuncDef extends Vn{
 
     public FuncDef(){
-        super("<frontend.vn.FuncDef>");
+        super("<FuncDef>");
     }
     public int RFuncDef(){
         int ret = 0;
@@ -46,11 +46,11 @@ public class FuncDef extends Vn{
                 this.addVn(block);
 
             } else {
-                Error.error("<frontend.vn.FuncDef>");
+                Error.error("<FuncDef>");
                 ret = -1;
             }
         } else {
-            Error.error("<frontend.vn.FuncDef>");
+            Error.error("<FuncDef>");
             ret = -1;
         }
         return ret;
@@ -77,7 +77,9 @@ public class FuncDef extends Vn{
         }
         symbol.setFuncFParamNum(num);
 
-        if(symbolTable.isSymbolExistThis(name, SymbolKind.FUNC)){
+        if(symbolTable.isSymbolExistThis(name, SymbolKind.FUNC)
+                || symbolTable.isSymbolExistThis(name, SymbolKind.VAR)
+                || symbolTable.isSymbolExistThis(name, SymbolKind.CONST)){
             Error.addError(new Error(vns.get(0).getEndLine(),ErrorType.NAME_REDEFINE));
             ret = -1;
         } else {

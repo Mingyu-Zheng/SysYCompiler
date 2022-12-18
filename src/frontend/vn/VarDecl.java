@@ -8,7 +8,7 @@ import frontend.token.TokenType;
 public class VarDecl extends Vn{
 
     public VarDecl(){
-        super("<frontend.vn.VarDecl>");
+        super("<VarDecl>");
     }
     public int RVarDecl(){
         int ret = 0;

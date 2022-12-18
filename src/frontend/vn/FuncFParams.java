@@ -8,7 +8,7 @@ import midend.llvm.Value;
 public class FuncFParams extends Vn{
 
     public FuncFParams(){
-        super("<frontend.vn.FuncFParams>");
+        super("<FuncFParams>");
     }
     public int RFuncFParams(){
         int ret = 0;

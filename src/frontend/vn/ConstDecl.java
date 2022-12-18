@@ -10,7 +10,7 @@ import midend.llvm.Value;
 public class ConstDecl extends Vn{
 
     public ConstDecl(){
-        super("<frontend.vn.ConstDecl>");
+        super("<ConstDecl>");
     }
     public int RConstDecl(){
         int ret = 0;
@@ -42,7 +42,7 @@ public class ConstDecl extends Vn{
                 }
             }
         } else {
-            Error.error("<frontend.vn.ConstDecl>");
+            Error.error("<ConstDecl>");
             ret = -1;
         }
         return ret;

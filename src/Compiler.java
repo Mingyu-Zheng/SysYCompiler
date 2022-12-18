@@ -32,7 +32,6 @@ public class Compiler {
         unitLLVM = new ValueModule();
         unit.RLLVM(symbolTableForLLVM, unitLLVM);
         unitMIPS = new MipsModule();
-//        compiler.writeLLVM();
         unitLLVM.RMIPS(unitMIPS);
         compiler.writeMIPS();
     }

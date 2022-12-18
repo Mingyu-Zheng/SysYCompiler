@@ -8,7 +8,7 @@ import frontend.token.TokenType;
 public class FuncRParams extends Vn{
 
     public FuncRParams(){
-        super("<frontend.vn.FuncRParams>");
+        super("<FuncRParams>");
     }
     public int RFuncRParams(){
         int ret = 0;

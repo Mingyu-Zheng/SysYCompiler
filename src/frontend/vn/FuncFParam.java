@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class FuncFParam extends Vn{
 
     public FuncFParam(){
-        super("<frontend.vn.FuncFParam>");
+        super("<FuncFParam>");
     }
     public int RFuncFParam(){
         int ret = 0;
@@ -33,7 +33,7 @@ public class FuncFParam extends Vn{
                 token = Token.nextToken();
 
                 if(!token.isType(TokenType.RBRACK)){
-                    Token.retractToken();
+                    // Token.retractToken();
                     Error.addError(new Error(line, ErrorType.LACK_RBRACK));
                     this.addToken(new Token(line,TokenType.RBRACK,TokenType.RBRACK.getWord()));
                     ret = -1;
@@ -63,7 +63,7 @@ public class FuncFParam extends Vn{
                 Token.retractToken();
             }
         } else {
-            Error.error("<frontend.vn.FuncFParam>");
+            Error.error("<FuncFParam>");
             ret = -1;
         }
         return ret;
