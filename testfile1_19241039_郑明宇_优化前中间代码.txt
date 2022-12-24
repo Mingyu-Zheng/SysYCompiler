@@ -1,0 +1,341 @@
+
+@N = global i32 10
+@a = global array 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+@0s0 = global str ", "
+@0s1 = global str "\n"
+@0s2 = global str ", "
+@0s3 = global str ", "
+@0s4 = global str "\n"
+
+define i32 @fib(i32) {
+
+fib_label0:
+    %1 = alloca i32 4
+
+fib_label1:
+    %2 = load i32, i32* %1(0)
+    %3 = li i32, i32 1
+    bne %2, %3 fib_label3
+
+fib_label2:
+    %4 = li i32, i32 1
+    ret i32 %4
+
+fib_label3:
+
+fib_label4:
+    %5 = load i32, i32* %1(0)
+    %6 = li i32, i32 2
+    bne %5, %6 fib_label6
+
+fib_label5:
+    %7 = li i32, i32 2
+    ret i32 %7
+
+fib_label6:
+    %8 = load i32, i32* %1(0)
+    %9 = li i32, i32 1
+    %10 = sub i32 %8, %9
+    %11 = call i32 @fib(i32 %10)
+    %12 = load i32, i32* %1(0)
+    %13 = li i32, i32 2
+    %14 = sub i32 %12, %13
+    %15 = call i32 @fib(i32 %14)
+    %16 = addu i32 %11, %15
+    ret i32 %16
+}
+
+define i32 @main() {
+
+main_label0:
+    %0 = alloca i32 4
+    %1 = li i32, i32 2
+    store i32 %1, i32* %0(0)
+    %2 = alloca i32 4
+    %3 = li i32, i32 5
+    store i32 %3, i32* %2(0)
+    %4 = alloca i32 4
+    %5 = li i32, i32 1
+    store i32 %5, i32* %4(0)
+    %6 = alloca i32 4
+    %7 = li i32, i32 2
+    store i32 %7, i32* %6(0)
+    %8 = call i32 @0getint()
+    store i32 %8, i32* %0(0)
+    %9 = call i32 @0getint()
+    store i32 %9, i32* %2(0)
+    %10 = load i32, i32* %0(0)
+    %11 = load i32, i32* %2(0)
+    %12 = mul i32 %10, %11
+    %13 = sub i32 0, %12
+    %14 = li i32, i32 4
+    %15 = call i32 @fib(i32 %14)
+    %16 = mul i32 %13, %15
+    %17 = li i32, i32 0
+    %18 = addu i32 %16, %17
+    %19 = la i32*, address @a
+    %20 = li i32, i32 1
+    %21 = mul i32 %20, 4
+    %22 = addu i32* %19, %21
+    %23 = load i32, i32* %22(0)
+    %24 = li i32, i32 1
+    %25 = mul i32 %23, %24
+    %26 = addu i32 %18, %25
+    %27 = li i32, i32 1
+    %28 = li i32, i32 2
+    %29 = div i32 %27, %28
+    %30 = sub i32 %26, %29
+    %31 = li i32, i32 5
+    %32 = mul i32 %30, %31
+    store i32 %32, i32* %0(0)
+    %33 = li i32, i32 7
+    %34 = li i32, i32 5923
+    %35 = mul i32 %33, %34
+    %36 = li i32, i32 56
+    %37 = rem i32 %35, %36
+    %38 = li i32, i32 57
+    %39 = mul i32 %37, %38
+    %40 = li i32, i32 5
+    %41 = call i32 @fib(i32 %40)
+    %42 = li i32, i32 2
+    %43 = addu i32 %41, %42
+    %44 = call i32 @fib(i32 %43)
+    %45 = sub i32 %39, %44
+    %46 = load i32, i32* %4(0)
+    %47 = load i32, i32* %6(0)
+    %48 = addu i32 %46, %47
+    %49 = li i32, i32 89
+    %50 = li i32, i32 2
+    %51 = div i32 %49, %50
+    %52 = li i32, i32 36
+    %53 = mul i32 %51, %52
+    %54 = li i32, i32 53
+    %55 = sub i32 %53, %54
+    %56 = li i32, i32 1
+    %57 = div i32 %55, %56
+    %58 = li i32, i32 6
+    %59 = mul i32 %57, %58
+    %60 = sub i32 %48, %59
+    %61 = li i32, i32 2
+    %62 = li i32, i32 45
+    %63 = li i32, i32 56
+    %64 = mul i32 %62, %63
+    %65 = li i32, i32 85
+    %66 = div i32 %64, %65
+    %67 = li i32, i32 56
+    %68 = sub i32 %66, %67
+    %69 = li i32, i32 35
+    %70 = li i32, i32 56
+    %71 = mul i32 %69, %70
+    %72 = li i32, i32 4
+    %73 = div i32 %71, %72
+    %74 = addu i32 %68, %73
+    %75 = li i32, i32 9
+    %76 = sub i32 %74, %75
+    %77 = mul i32 %61, %76
+    %78 = sub i32 %60, %77
+    %79 = addu i32 %45, %78
+    store i32 %79, i32* %2(0)
+    %80 = alloca i32 4
+    %81 = li i32, i32 6
+    %82 = sub i32 0, %81
+    store i32 %82, i32* %80(0)
+
+main_label1:
+
+main_label2:
+    %83 = load i32, i32* %0(0)
+    %84 = li i32, i32 100
+    bgt %83, %84 main_label5
+
+main_label3:
+    %85 = la i32*, address @a
+    %86 = li i32, i32 0
+    %87 = mul i32 %86, 4
+    %88 = addu i32* %85, %87
+    %89 = la i32*, address @a
+    %90 = li i32, i32 0
+    %91 = mul i32 %90, 4
+    %92 = addu i32* %89, %91
+    %93 = load i32, i32* %92(0)
+    %94 = load i32, i32* %80(0)
+    %95 = load i32, i32* %80(0)
+    %96 = mul i32 %94, %95
+    %97 = addu i32 %93, %96
+    store i32 %97, i32* %88(0)
+    %98 = la i32*, address @a
+    %99 = li i32, i32 1
+    %100 = mul i32 %99, 4
+    %101 = addu i32* %98, %100
+    %102 = la i32*, address @a
+    %103 = li i32, i32 1
+    %104 = mul i32 %103, 4
+    %105 = addu i32* %102, %104
+    %106 = load i32, i32* %105(0)
+    %107 = load i32, i32* %80(0)
+    %108 = load i32, i32* %80(0)
+    %109 = mul i32 %107, %108
+    %110 = addu i32 %106, %109
+    store i32 %110, i32* %101(0)
+    %111 = la i32*, address @a
+    %112 = li i32, i32 2
+    %113 = mul i32 %112, 4
+    %114 = addu i32* %111, %113
+    %115 = la i32*, address @a
+    %116 = li i32, i32 2
+    %117 = mul i32 %116, 4
+    %118 = addu i32* %115, %117
+    %119 = load i32, i32* %118(0)
+    %120 = load i32, i32* %80(0)
+    %121 = load i32, i32* %80(0)
+    %122 = mul i32 %120, %121
+    %123 = addu i32 %119, %122
+    store i32 %123, i32* %114(0)
+    %124 = la i32*, address @a
+    %125 = li i32, i32 3
+    %126 = mul i32 %125, 4
+    %127 = addu i32* %124, %126
+    %128 = la i32*, address @a
+    %129 = li i32, i32 3
+    %130 = mul i32 %129, 4
+    %131 = addu i32* %128, %130
+    %132 = load i32, i32* %131(0)
+    %133 = load i32, i32* %80(0)
+    %134 = load i32, i32* %80(0)
+    %135 = mul i32 %133, %134
+    %136 = addu i32 %132, %135
+    store i32 %136, i32* %127(0)
+    %137 = la i32*, address @a
+    %138 = li i32, i32 4
+    %139 = mul i32 %138, 4
+    %140 = addu i32* %137, %139
+    %141 = la i32*, address @a
+    %142 = li i32, i32 4
+    %143 = mul i32 %142, 4
+    %144 = addu i32* %141, %143
+    %145 = load i32, i32* %144(0)
+    %146 = load i32, i32* %80(0)
+    %147 = load i32, i32* %80(0)
+    %148 = mul i32 %146, %147
+    %149 = addu i32 %145, %148
+    store i32 %149, i32* %140(0)
+    %150 = la i32*, address @a
+    %151 = li i32, i32 5
+    %152 = mul i32 %151, 4
+    %153 = addu i32* %150, %152
+    %154 = la i32*, address @a
+    %155 = li i32, i32 5
+    %156 = mul i32 %155, 4
+    %157 = addu i32* %154, %156
+    %158 = load i32, i32* %157(0)
+    %159 = load i32, i32* %80(0)
+    %160 = load i32, i32* %80(0)
+    %161 = mul i32 %159, %160
+    %162 = addu i32 %158, %161
+    store i32 %162, i32* %153(0)
+    %163 = la i32*, address @a
+    %164 = li i32, i32 6
+    %165 = mul i32 %164, 4
+    %166 = addu i32* %163, %165
+    %167 = la i32*, address @a
+    %168 = li i32, i32 6
+    %169 = mul i32 %168, 4
+    %170 = addu i32* %167, %169
+    %171 = load i32, i32* %170(0)
+    %172 = load i32, i32* %80(0)
+    %173 = load i32, i32* %80(0)
+    %174 = mul i32 %172, %173
+    %175 = addu i32 %171, %174
+    store i32 %175, i32* %166(0)
+    %176 = la i32*, address @a
+    %177 = li i32, i32 7
+    %178 = mul i32 %177, 4
+    %179 = addu i32* %176, %178
+    %180 = la i32*, address @a
+    %181 = li i32, i32 7
+    %182 = mul i32 %181, 4
+    %183 = addu i32* %180, %182
+    %184 = load i32, i32* %183(0)
+    %185 = load i32, i32* %80(0)
+    %186 = load i32, i32* %80(0)
+    %187 = mul i32 %185, %186
+    %188 = addu i32 %184, %187
+    store i32 %188, i32* %179(0)
+    %189 = la i32*, address @a
+    %190 = li i32, i32 8
+    %191 = mul i32 %190, 4
+    %192 = addu i32* %189, %191
+    %193 = la i32*, address @a
+    %194 = li i32, i32 8
+    %195 = mul i32 %194, 4
+    %196 = addu i32* %193, %195
+    %197 = load i32, i32* %196(0)
+    %198 = load i32, i32* %80(0)
+    %199 = load i32, i32* %80(0)
+    %200 = mul i32 %198, %199
+    %201 = addu i32 %197, %200
+    store i32 %201, i32* %192(0)
+    %202 = la i32*, address @a
+    %203 = li i32, i32 9
+    %204 = mul i32 %203, 4
+    %205 = addu i32* %202, %204
+    %206 = la i32*, address @a
+    %207 = li i32, i32 9
+    %208 = mul i32 %207, 4
+    %209 = addu i32* %206, %208
+    %210 = load i32, i32* %209(0)
+    %211 = load i32, i32* %80(0)
+    %212 = load i32, i32* %80(0)
+    %213 = mul i32 %211, %212
+    %214 = addu i32 %210, %213
+    store i32 %214, i32* %205(0)
+    %215 = load i32, i32* %0(0)
+    %216 = li i32, i32 1
+    %217 = addu i32 %215, %216
+    store i32 %217, i32* %0(0)
+
+main_label4:
+    jump main_label1
+
+main_label5:
+    %218 = li i32, i32 0
+    store i32 %218, i32* %0(0)
+
+main_label6:
+
+main_label7:
+    %219 = load i32, i32* %0(0)
+    %220 = li i32, i32 10
+    bge %219, %220 main_label10
+
+main_label8:
+    %221 = la i32*, address @a
+    %222 = load i32, i32* %0(0)
+    %223 = mul i32 %222, 4
+    %224 = addu i32* %221, %223
+    %225 = load i32, i32* %224(0)
+    call void @0putint(i32 %225)
+    call void @0putstr(str @0s0)
+    %226 = load i32, i32* %0(0)
+    %227 = li i32, i32 1
+    %228 = addu i32 %226, %227
+    store i32 %228, i32* %0(0)
+
+main_label9:
+    jump main_label6
+
+main_label10:
+    %229 = load i32, i32* %0(0)
+    %230 = load i32, i32* %2(0)
+    %231 = load i32, i32* %80(0)
+    call void @0putstr(str @0s1)
+    call void @0putint(i32 %229)
+    call void @0putstr(str @0s2)
+    call void @0putint(i32 %230)
+    call void @0putstr(str @0s3)
+    call void @0putint(i32 %231)
+    call void @0putstr(str @0s4)
+    %232 = li i32, i32 0
+    ret i32 %232
+}
+

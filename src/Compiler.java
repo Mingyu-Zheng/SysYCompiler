@@ -19,7 +19,7 @@ public class Compiler {
     static MipsModule unitMIPS;
 
     public static void main(String args[]){
-        Compiler compiler = new Compiler("testfile.txt","mips.txt");
+        Compiler compiler = new Compiler("testfile.txt","error.txt");
         Token token = null;
         while((token = Token.getToken(compiler.reader)) != null){
             Token.addToken(token);
