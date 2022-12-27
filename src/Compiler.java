@@ -28,12 +28,12 @@ public class Compiler {
         unit.RCompUnit();
         symbolTableForError = new SymbolTable(1);
         unit.RAnalysis(symbolTableForError);
-        symbolTableForLLVM = new SymbolTable(1);
-        unitLLVM = new ValueModule();
-        unit.RLLVM(symbolTableForLLVM, unitLLVM);
-        unitMIPS = new MipsModule();
-        unitLLVM.RMIPS(unitMIPS);
-        compiler.writeMIPS();
+//        symbolTableForLLVM = new SymbolTable(1);
+//        unitLLVM = new ValueModule();
+//        unit.RLLVM(symbolTableForLLVM, unitLLVM);
+//        unitMIPS = new MipsModule();
+//        unitLLVM.RMIPS(unitMIPS);
+        compiler.writeErrors();
     }
 
     Compiler(String fin,String fout){

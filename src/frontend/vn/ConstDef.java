@@ -83,7 +83,7 @@ public class ConstDef extends Vn{
             symbolTable.addSymbol(symbol);
         }
         for(Vn vninit:vns){
-            if(vninit instanceof ConstInitVal){
+            if(!vninit.isVt){
                 int renew = vninit.RAnalysis(symbolTable);
                 if(renew == -1){
                     ret = -1;

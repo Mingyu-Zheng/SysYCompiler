@@ -2,8 +2,7 @@ package frontend.vn;
 
 import error.Error;
 import error.ErrorType;
-import frontend.symbol.SymbolFuncType;
-import frontend.symbol.SymbolTable;
+import frontend.symbol.*;
 import frontend.token.Token;
 import frontend.token.TokenType;
 import midend.llvm.*;
@@ -42,6 +41,25 @@ public class MainFuncDef extends Vn{
 
     public int RAnalysis(SymbolTable symbolTable){
         int ret = 0;
+        String name = this.vns.get(1).getToken().getValue();
+        Symbol symbol = new Symbol(name, SymbolKind.FUNC, SymbolType.INT);
+        String functype = this.vns.get(0).getToken().getValue();
+        if(SymbolFuncType.isFuncType(functype, SymbolFuncType.INT)){
+            symbol.setFuncType(SymbolFuncType.INT);
+        } else {
+            symbol.setFuncType(SymbolFuncType.VOID);
+        }
+        symbol.setFuncFParamNum(0);
+
+        if(symbolTable.isSymbolExistThis(name, SymbolKind.FUNC)
+                || symbolTable.isSymbolExistThis(name, SymbolKind.VAR)
+                || symbolTable.isSymbolExistThis(name, SymbolKind.CONST)){
+            Error.addError(new Error(vns.get(0).getEndLine(),ErrorType.NAME_REDEFINE));
+            ret = -1;
+        } else {
+            symbolTable.addSymbol(symbol);
+        }
+
         SymbolTable newSymbolTable = symbolTable.newSonFuncTable();
         for(Vn vn:vns){
             if(vn instanceof Block){

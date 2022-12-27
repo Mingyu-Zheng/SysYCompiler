@@ -2,10 +2,7 @@ package frontend.vn;
 
 import error.Error;
 import error.ErrorType;
-import frontend.symbol.Symbol;
-import frontend.symbol.SymbolKind;
-import frontend.symbol.SymbolTable;
-import frontend.symbol.SymbolType;
+import frontend.symbol.*;
 import frontend.token.Token;
 import frontend.token.TokenType;
 import midend.llvm.*;
@@ -316,12 +313,18 @@ public class Stmt extends Vn{
         Vn vn0 = vns.get(0);
         if(vn0.isVt){
             if(vn0.getToken().isType(TokenType.RETURNTK)){
+                Symbol funcsymbol = symbolTable.getFuncNowAt();
                 for(Vn vn:vns){
                     if(vn.isVt){
                         continue;
                     }
-                    if(vn.RAnalysis(symbolTable) == -1){
+                    if(funcsymbol.getFuncType().isFuncType(SymbolFuncType.VOID)){
+                        Error.addError(new Error(vn0.getEndLine(), ErrorType.FUNCVOID_RETURN));
                         ret = -1;
+                    } else {
+                        if(vn.RAnalysis(symbolTable) == -1){
+                            ret = -1;
+                        }
                     }
                 }
             } else if(vn0.getToken().isType(TokenType.WHILETK)){

@@ -247,6 +247,28 @@ public class SymbolTable {
         return false;
     }
 
+    public Symbol getFuncAtThis(){
+        for(int i = symbols.size() - 1;i >= 0;i--){
+            Symbol s = symbols.get(i);
+            if(s.isKindOf(SymbolKind.FUNC)){
+                return s;
+            }
+        }
+        return null;
+    }
+
+    public Symbol getFuncNowAt(){
+        SymbolTable table = this;
+        while(table != null){
+            Symbol symbol = table.getFuncAtThis();
+            if(symbol != null){
+                return symbol;
+            }
+            table = table.parentTable;
+        }
+        return null;
+    }
+
     public Symbol getSymbolThis(String name, SymbolKind... kind){
         for(Symbol s : symbols){
             if(s.getName().equals(name)){

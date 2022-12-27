@@ -79,7 +79,7 @@ public class VarDef extends Vn{
             symbolTable.addSymbol(symbol);
         }
         for(Vn vninit:vns){
-            if(vninit instanceof InitVal){
+            if(!vninit.isVt){
                 int renew = vninit.RAnalysis(symbolTable);
                 if(renew == -1){
                     ret = -1;
